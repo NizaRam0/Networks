@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Networks — Complete Study Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent-l9: #58a6ff;
+    --accent-l10: #3fb950;
+    --accent-l11: #f78166;
+    --accent-l12: #d2a8ff;
+    --accent-l13: #ffa657;
+    --correct: #3fb950;
+    --wrong: #f85149;
+    --highlight: #e3b341;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+    --display: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(88,166,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent-l9);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #e6edf3 30%, #58a6ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 600px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--display);
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent-l9);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ── NAVIGATION ── */
+  .nav-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tab {
+    padding: 14px 18px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--text); border-bottom-color: var(--accent-l9); }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .lecture-panel {
+    display: none;
+    padding: 48px 0;
+  }
+  .lecture-panel.active { display: block; }
+
+  /* ── LECTURE HEADER ── */
+  .lec-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lec-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .lec-meta { flex: 1; }
+  .lec-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .lec-title {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .lec-desc { color: var(--muted); font-size: 14px; }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 40px;
+  }
+  .section-title {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── SUMMARY CARD ── */
+  .summary-grid {
+    display: grid;
+    gap: 16px;
+  }
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+  }
+  .topic-card-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .topic-points { list-style: none; }
+  .topic-points li {
+    padding: 5px 0 5px 18px;
+    position: relative;
+    color: var(--text);
+    font-size: 14px;
+  }
+  .topic-points li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    font-size: 10px;
+    top: 7px;
+  }
+  .topic-points li strong { color: var(--highlight); }
+  .topic-points li code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: var(--accent-l9);
+  }
+  .sub-points { list-style: none; margin-left: 20px; }
+  .sub-points li {
+    padding: 3px 0 3px 16px;
+    position: relative;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .sub-points li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--border);
+    font-size: 18px;
+    line-height: 1;
+    top: 4px;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 8px 0;
+  }
+  .comp-table th {
+    background: var(--surface2);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .comp-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(48,54,61,0.6);
+    vertical-align: top;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* formula box */
+  .formula-box {
+    background: #0d1117;
+    border: 1px solid rgba(88,166,255,0.3);
+    border-left: 3px solid var(--accent-l9);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #a5d6ff;
+    margin: 12px 0;
+  }
+
+  /* ── Q&A SECTION ── */
+  .qa-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .qa-controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--surface);
+    color: var(--muted);
+  }
+  .btn:hover { border-color: var(--accent-l9); color: var(--accent-l9); }
+  .btn.active-btn { background: var(--accent-l9); color: #000; border-color: var(--accent-l9); }
+  .btn-reveal { background: rgba(63,185,80,0.1); border-color: var(--correct); color: var(--correct); }
+  .btn-reveal:hover { background: rgba(63,185,80,0.2); }
+  .btn-hide { background: rgba(248,81,73,0.1); border-color: var(--wrong); color: var(--wrong); }
+
+  /* ── MCQ CARD ── */
+  .q-grid { display: grid; gap: 12px; }
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .q-card:hover { border-color: rgba(88,166,255,0.3); }
+  .q-top {
+    padding: 16px 20px 12px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .q-num-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 3px 8px;
+    color: var(--muted);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .q-text {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    flex: 1;
+  }
+  .q-options {
+    padding: 0 20px 16px 52px;
+    display: grid;
+    gap: 6px;
+  }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    background: rgba(255,255,255,0.02);
+  }
+  .opt:hover { background: rgba(88,166,255,0.06); border-color: rgba(88,166,255,0.2); }
+  .opt-letter {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .opt-text { flex: 1; line-height: 1.4; color: var(--text); }
+
+  /* Answer revealed states */
+  .opt.correct {
+    background: rgba(63,185,80,0.08);
+    border-color: rgba(63,185,80,0.3);
+  }
+  .opt.correct .opt-letter {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: #000;
+  }
+  .opt.correct .opt-text { color: #7ee787; }
+
+  .q-answer {
+    display: none;
+    padding: 10px 20px 14px 52px;
+    border-top: 1px solid var(--border);
+    background: rgba(63,185,80,0.04);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--correct);
+    letter-spacing: 0.03em;
+  }
+  .q-answer.revealed { display: block; }
+
+  /* ── T/F CARDS ── */
+  .tf-grid { display: grid; gap: 10px; }
+  .tf-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .tf-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tf-badge.true-badge {
+    background: rgba(63,185,80,0.15);
+    color: var(--correct);
+    border: 1px solid rgba(63,185,80,0.3);
+  }
+  .tf-badge.false-badge {
+    background: rgba(248,81,73,0.12);
+    color: var(--wrong);
+    border: 1px solid rgba(248,81,73,0.3);
+  }
+  .tf-badge.hidden-badge {
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .tf-content { flex: 1; }
+  .tf-question { font-size: 14px; line-height: 1.5; margin-bottom: 0; }
+  .tf-explanation {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    display: none;
+  }
+  .tf-explanation.revealed { display: block; }
+
+  /* ── QUICK REF ── */
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .ref-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .ref-card-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ref-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(48,54,61,0.4);
+    font-size: 13px;
+    gap: 10px;
+  }
+  .ref-item:last-child { border-bottom: none; }
+  .ref-label { color: var(--muted); flex: 1; }
+  .ref-value {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--highlight);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { margin-bottom: 20px; }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+
+  /* ── FILTER TABS ── */
+  .filter-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .filter-tab {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    background: none;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .filter-tab:hover, .filter-tab.active { border-color: var(--accent-l9); color: var(--accent-l9); background: rgba(88,166,255,0.06); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 40px 20px 32px; }
+    .nav-bar { padding: 0 16px; }
+    .container { padding: 0 16px; }
+    .lec-header { flex-direction: column; gap: 14px; }
+    .q-options { padding-left: 20px; }
+    .q-answer { padding-left: 20px; }
+    .hero-stats { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Beirut Arab University · Computer Networks</div>
+  <h1 class="hero-title">Complete Study Guide</h1>
+  <p class="hero-sub">Full summaries, 290 MCQ questions, and 56 True/False questions covering all 5 lectures. Correct answers revealed on demand.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Lectures</div></div>
+    <div class="stat"><div class="stat-num">290</div><div class="stat-label">MCQ Questions</div></div>
+    <div class="stat"><div class="stat-num">56</div><div class="stat-label">True/False</div></div>
+    <div class="stat"><div class="stat-num">346</div><div class="stat-label">Total Questions</div></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <button class="nav-tab active" onclick="showPanel('l9')">L9 · NL Part 1</button>
+  <button class="nav-tab" onclick="showPanel('l10')">L10 · NL Part 2</button>
+  <button class="nav-tab" onclick="showPanel('l11')">L11 · NL Part 3</button>
+  <button class="nav-tab" onclick="showPanel('l12')">L12 · Transport</button>
+  <button class="nav-tab" onclick="showPanel('l13')">L13 · Application</button>
+  <button class="nav-tab" onclick="showPanel('ref')">📌 Quick Ref</button>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════
+     LECTURE 9 — NETWORK LAYER PART 1
+═══════════════════════════════════════════ -->
+<div id="panel-l9" class="lecture-panel active">
+  <div class="lec-header">
+    <div class="lec-badge" style="background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.3);">📘</div>
+    <div class="lec-meta">
+      <div class="lec-num" style="color:var(--accent-l9)">Lecture 9</div>
+      <div class="lec-title">Network Layer — Part 1</div>
+      <div class="lec-desc">Forwarding · Routing · VC vs. Datagram · Dijkstra's Algorithm</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l9)">📋 Full Summary</div>
+    <div class="summary-grid">
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l9)">1 · Network Layer Overview</div>
+        <ul class="topic-points">
+          <li>Delivers <strong>packets</strong> between endpoints over <strong>multiple links</strong></li>
+          <li>Sending side: <strong>encapsulates segments into datagrams</strong></li>
+          <li>Receiving side: <strong>delivers segments to transport layer</strong></li>
+          <li>Both <strong>end hosts</strong> and <strong>routers</strong> implement the network layer</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l9)">2 · Two Key Functions</div>
+        <ul class="topic-points">
+          <li><strong>Forwarding</strong> (data plane) — move packets from router input to correct output <em style="color:var(--muted)">— local, per-router</em></li>
+          <li><strong>Routing</strong> (control plane) — determine the full path source→destination <em style="color:var(--muted)">— network-wide</em></li>
+          <li>Every router has a <strong>forwarding table</strong> mapping header values → output links</li>
+          <li>Routing algorithms populate the forwarding table</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l9)">3 · Network Layer Services</div>
+        <ul class="topic-points">
+          <li><strong>Guaranteed delivery</strong> — packet will eventually arrive</li>
+          <li><strong>Guaranteed delivery with bounded delay</strong> — e.g. within 100 ms</li>
+          <li><strong>In-order packet delivery</strong> — packets arrive in order sent</li>
+          <li><strong>Guaranteed minimum bandwidth</strong> — sustains specified bit rate</li>
+          <li><strong>Guaranteed maximum jitter</strong> — equal inter-packet spacing at sender and receiver</li>
+          <li><strong>Security services</strong> — encryption using secret session key</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l9)">4 · VC vs. Datagram Networks</div>
+        <table class="comp-table">
+          <tr><th>Issue</th><th>Datagram (Connectionless)</th><th>Virtual Circuit (Connection-Oriented)</th></tr>
+          <tr><td>Circuit setup</td><td>Not needed</td><td>Required</td></tr>
+          <tr><td>Addressing</td><td>Full source + destination address per packet</td><td>Short VC number per packet</td></tr>
+          <tr><td>State info</td><td>Routers hold no state per connection</td><td>Each VC requires router table space</td></tr>
+          <tr><td>Routing</td><td>Each packet routed independently</td><td>Route chosen at setup; all packets follow it</td></tr>
+          <tr><td>Router failure</td><td>Only in-transit packets lost</td><td>All VCs through failed router terminated</td></tr>
+          <tr><td>QoS / Congestion</td><td>Difficult</td><td>Easy if resources pre-allocated</td></tr>
+          <tr><td>Real-world example</td><td>Internet (IP)</td><td>Telephone system</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l9)">5 · Routing Algorithms Overview</div>
+        <ul class="topic-points">
+          <li>Network modeled as graph <strong>G = (N, E)</strong> — N = routers, E = links</li>
+          <li>Edge cost <code>c(x,y)</code> = physical length, link speed, or monetary cost; if (x,y)∉E then <code>c(x,y) = ∞</code></li>
+          <li>Goal: find the <strong>least-cost path</strong> from source to destination</li>
+          <li>Types: Shortest Path, <strong>Distance Vector</strong>, <strong>Link State</strong>, Hierarchical, Broadcast, Multicast, Anycast</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l9)">6 · Dijkstra's Link-State Algorithm</div>
+        <ul class="topic-points">
+          <li><strong>All nodes know complete topology</strong> via link-state broadcast</li>
+          <li>Computes least-cost paths from <strong>one source to all other nodes</strong></li>
+          <li>Iterative: after <em>k</em> iterations, <em>k</em> destinations confirmed</li>
+        </ul>
+        <div class="formula-box">
+Notation:<br>
+D(v)  = current best cost from source to v<br>
+p(v)  = predecessor of v on least-cost path<br>
+N'    = set of nodes with definitively known path<br><br>
+Init:  N' = {u};  D(v) = c(u,v) if neighbor, else ∞<br>
+Loop:  find w ∉ N' with min D(w) → add to N'<br>
+       D(v) = min(D(v), D(w) + c(w,v))  for v adj. to w, v ∉ N'<br>
+Until: all nodes in N'
+        </div>
+        <ul class="topic-points">
+          <li>Result → <strong>forwarding table</strong>: for each destination, store next-hop</li>
+          <li>Default router = first-hop router = source router</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MCQ -->
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l9)">❓ Multiple Choice Questions (50)</div>
+    <div class="qa-header">
+      <div style="font-family:var(--mono);font-size:12px;color:var(--muted)">Click any option to check · or use buttons below</div>
+      <div class="qa-controls">
+        <button class="btn btn-reveal" onclick="revealAll('l9-mcq')">Show All Answers</button>
+        <button class="btn btn-hide" onclick="hideAll('l9-mcq')">Hide All</button>
+      </div>
+    </div>
+    <div class="q-grid" id="l9-mcq"></div>
+  </div>
+
+  <!-- T/F -->
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l9)">✅ True / False Questions (10)</div>
+    <div class="qa-controls" style="margin-bottom:14px">
+      <button class="btn btn-reveal" onclick="revealAllTF('l9-tf')">Reveal All</button>
+      <button class="btn btn-hide" onclick="hideAllTF('l9-tf')">Hide All</button>
+    </div>
+    <div class="tf-grid" id="l9-tf"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     LECTURE 10 — NETWORK LAYER PART 2
+═══════════════════════════════════════════ -->
+<div id="panel-l10" class="lecture-panel">
+  <div class="lec-header">
+    <div class="lec-badge" style="background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.3);">📗</div>
+    <div class="lec-meta">
+      <div class="lec-num" style="color:var(--accent-l10)">Lecture 10</div>
+      <div class="lec-title">Network Layer — Part 2</div>
+      <div class="lec-desc">Distance Vector · AS · IPv4 Format · Fragmentation · Classful Addressing</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l10)">📋 Full Summary</div>
+    <div class="summary-grid">
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l10)">1 · Distance Vector (DV) Algorithm</div>
+        <ul class="topic-points">
+          <li>Each node sends its <strong>distance vector estimate</strong> to direct neighbors periodically</li>
+          <li>Update using <strong>Bellman-Ford equation</strong>:</li>
+        </ul>
+        <div class="formula-box">Dx(y) ← min<sub>v</sub> { c(x,v) + Dv(y) }  for each y ∈ N</div>
+        <ul class="topic-points">
+          <li>Each node maintains: direct link costs, own DV, neighbors' DVs</li>
+          <li>Process: <strong>wait → recompute → notify neighbors</strong> if DV changed</li>
+          <li>Reaches <strong>quiescent state</strong> when no updates trigger changes</li>
+          <li><strong>Count-to-infinity problem</strong>: bad news (cost increase) propagates slowly</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l10)">2 · Autonomous Systems (AS) & Hierarchical Routing</div>
+        <ul class="topic-points">
+          <li>Flat routing doesn't scale: <strong>scale</strong> (billions of destinations) + <strong>administrative autonomy</strong></li>
+          <li><strong>AS</strong> = group of routers under same administrative control (same ISP/company)</li>
+          <li>Routers in same AS run <strong>intra-AS routing protocol</strong> (e.g., RIP, OSPF)</li>
+          <li><strong>Gateway routers</strong> = forward packets to destinations outside the AS</li>
+          <li><strong>Inter-AS routing</strong> (e.g., BGP) determines routing between ASes</li>
+          <li>Both intra-AS and inter-AS algorithms contribute to the forwarding table</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l10)">3 · IPv4 Datagram Format (Key Fields)</div>
+        <ul class="topic-points">
+          <li><strong>Version</strong> (4b) — IP version (4 or 6)</li>
+          <li><strong>Header Length</strong> (4b) — locates start of data (variable options)</li>
+          <li><strong>Type of Service / TOS</strong> — distinguishes traffic types (real-time vs FTP)</li>
+          <li><strong>Datagram Length</strong> (16b) — total bytes; max <code>65,535</code>; typically ≤ <code>1,500</code></li>
+          <li><strong>TTL</strong> — decremented by 1 per router; dropped at <code>0</code></li>
+          <li><strong>Protocol</strong> — <code>6=TCP</code>, <code>17=UDP</code></li>
+          <li><strong>Header Checksum</strong> — detects bit errors in IP header</li>
+          <li><strong>Identifier, Flags, Fragmentation Offset</strong> — handle IP fragmentation</li>
+          <li><strong>Source & Destination IP</strong> (32b each)</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l10)">4 · IP Fragmentation & Reassembly</div>
+        <ul class="topic-points">
+          <li><strong>MTU</strong> = Maximum Transmission Unit = max data in one link-layer frame</li>
+          <li>If datagram > MTU → must <strong>fragment</strong></li>
+          <li><strong>Reassembly at destination host only</strong> (not at routers)</li>
+          <li>Last fragment: <strong>flag bit = 0</strong>; all others: <strong>flag bit = 1</strong></li>
+          <li>Offset field specifies where each fragment fits in original datagram</li>
+          <li>Example: 4000-byte datagram (MTU=1500) → <strong>3 fragments</strong> (1480+1480+1020 data bytes)</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l10)">5 · Classful IPv4 Addressing</div>
+        <table class="comp-table">
+          <tr><th>Class</th><th>First Bits</th><th>First Byte</th><th>Netid/Hostid</th><th>Mask</th><th>Hosts/Net</th></tr>
+          <tr><td>A</td><td>0</td><td>0–127</td><td>1B / 3B</td><td>/8</td><td>16,777,214</td></tr>
+          <tr><td>B</td><td>10</td><td>128–191</td><td>2B / 2B</td><td>/16</td><td>65,534</td></tr>
+          <tr><td>C</td><td>110</td><td>192–223</td><td>3B / 1B</td><td>/24</td><td>254</td></tr>
+          <tr><td>D</td><td>1110</td><td>224–239</td><td colspan="3">Multicast</td></tr>
+          <tr><td>E</td><td>1111</td><td>240–255</td><td colspan="3">Experimental</td></tr>
+        </table>
+        <ul class="topic-points" style="margin-top:10px">
+          <li>IP address is associated with an <strong>interface</strong>, not the host/router</li>
+          <li>Subnet mask: network bits=1, host bits=0; usable hosts = <code>2ⁿ - 2</code></li>
+          <li>Network address = all host bits 0; Broadcast = all host bits 1</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l10)">❓ Multiple Choice Questions (70)</div>
+    <div class="qa-controls" style="margin-bottom:14px">
+      <button class="btn btn-reveal" onclick="revealAll('l10-mcq')">Show All Answers</button>
+      <button class="btn btn-hide" onclick="hideAll('l10-mcq')">Hide All</button>
+    </div>
+    <div class="q-grid" id="l10-mcq"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l10)">✅ True / False Questions (12)</div>
+    <div class="qa-controls" style="margin-bottom:14px">
+      <button class="btn btn-reveal" onclick="revealAllTF('l10-tf')">Reveal All</button>
+      <button class="btn btn-hide" onclick="hideAllTF('l10-tf')">Hide All</button>
+    </div>
+    <div class="tf-grid" id="l10-tf"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     LECTURE 11 — NETWORK LAYER PART 3
+═══════════════════════════════════════════ -->
+<div id="panel-l11" class="lecture-panel">
+  <div class="lec-header">
+    <div class="lec-badge" style="background:rgba(247,129,102,0.1);border:1px solid rgba(247,129,102,0.3);">📙</div>
+    <div class="lec-meta">
+      <div class="lec-num" style="color:var(--accent-l11)">Lecture 11</div>
+      <div class="lec-title">Network Layer — Part 3</div>
+      <div class="lec-desc">CIDR · NAT · DHCP · ARP · ICMP · IPv6</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l11)">📋 Full Summary</div>
+    <div class="summary-grid">
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l11)">1 · CIDR — Classless Addressing</div>
+        <ul class="topic-points">
+          <li>Classful addressing led to address depletion → solution: <strong>CIDR</strong></li>
+          <li>Block represented as <code>x.y.z.t/n</code> where <strong>/n = prefix length</strong></li>
+          <li>Mask: n leftmost bits = 1 (network), 32-n rightmost bits = 0 (host)</li>
+          <li><strong>First address</strong>: set rightmost (32-n) bits to <strong>0</strong></li>
+          <li><strong>Last address</strong>: set rightmost (32-n) bits to <strong>1</strong></li>
+          <li><strong>Block size</strong> = 2^(32-n)</li>
+          <li><strong>3 restrictions</strong>: contiguous addresses, size must be power of 2, first address divisible by block size</li>
+          <li>Usable hosts = 2^(32-n) − 2</li>
+          <li>Addresses managed by <strong>ICANN</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l11)">2 · NAT — Network Address Translation</div>
+        <ul class="topic-points">
+          <li>Translates <strong>private IP addresses → single public IP</strong> for Internet communication</li>
+          <li>Benefits: saves IP addresses, hides internal addresses, easy ISP changes</li>
+          <li>Private ranges: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code></li>
+        </ul>
+        <div class="formula-box">
+Outgoing: replace (src IP, port) → (NAT IP, new port); record in NAT table<br>
+Incoming: replace (NAT IP, new port) → (orig src IP, port) from NAT table
+        </div>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l11)">3 · DHCP — Dynamic Host Configuration Protocol</div>
+        <ul class="topic-points">
+          <li>"Plug-and-play" protocol — host gets IP <strong>automatically</strong></li>
+          <li>Provides: IP address, subnet mask, default gateway, DNS server</li>
+          <li><strong>DORA process</strong>:</li>
+        </ul>
+        <ul class="sub-points">
+          <li><strong>Discover</strong>: client broadcasts "is there a DHCP server?" (src: 0.0.0.0, dst: 255.255.255.255)</li>
+          <li><strong>Offer</strong>: server broadcasts "here's an IP you can use"</li>
+          <li><strong>Request</strong>: client broadcasts "I'll take that IP"</li>
+          <li><strong>ACK</strong>: server broadcasts "confirmed, it's yours"</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l11)">4 · ARP, ICMP, IPv6</div>
+        <ul class="topic-points">
+          <li><strong>ARP</strong> — maps IP addresses to MAC/Ethernet addresses (bridges network ↔ link layers)</li>
+          <li><strong>ICMP</strong> — hosts/routers communicate network-layer info; used for error reporting (unreachable host/port/network) and query (ping = echo request/reply)</li>
+          <li><strong>IPv6</strong>: 128-bit addresses, fixed 40-byte header, hop limit replaces TTL, no fragmentation at routers, no header checksum</li>
+          <li>IPv6 changes: expanded addressing (32→128 bits), anycast addresses, streamlined header, flow labeling</li>
+        </ul>
+        <div class="formula-box">
+IPv6 notation: 128 bits → 8 groups of 4 hex digits, separated by :<br>
+Shortening: remove ONE set of consecutive 0-groups → replace with ::<br>
+            remove leading 0s in each group<br>
+WARNING: :: can only be used ONCE (avoid ambiguity)
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l11)">❓ Multiple Choice Questions (70)</div>
+    <div class="qa-controls" style="margin-bottom:14px">
+      <button class="btn btn-reveal" onclick="revealAll('l11-mcq')">Show All Answers</button>
+      <button class="btn btn-hide" onclick="hideAll('l11-mcq')">Hide All</button>
+    </div>
+    <div class="q-grid" id="l11-mcq"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l11)">✅ True / False Questions (12)</div>
+    <div class="qa-controls" style="margin-bottom:14px">
+      <button class="btn btn-reveal" onclick="revealAllTF('l11-tf')">Reveal All</button>
+      <button class="btn btn-hide" onclick="hideAllTF('l11-tf')">Hide All</button>
+    </div>
+    <div class="tf-grid" id="l11-tf"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     LECTURE 12 — TRANSPORT LAYER
+═══════════════════════════════════════════ -->
+<div id="panel-l12" class="lecture-panel">
+  <div class="lec-header">
+    <div class="lec-badge" style="background:rgba(210,168,255,0.1);border:1px solid rgba(210,168,255,0.3);">📔</div>
+    <div class="lec-meta">
+      <div class="lec-num" style="color:var(--accent-l12)">Lecture 12</div>
+      <div class="lec-title">Transport Layer</div>
+      <div class="lec-desc">TCP · UDP · RDT · Go-Back-N · Selective Repeat · Connection Management</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l12)">📋 Full Summary</div>
+    <div class="summary-grid">
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l12)">1 · Transport Layer Overview</div>
+        <ul class="topic-points">
+          <li>Provides <strong>end-to-end communication</strong> between applications on different devices</li>
+          <li>Breaks data into <strong>segments</strong> at sender; reassembles at destination</li>
+          <li>Services: <strong>flow control</strong>, <strong>error control</strong> (retransmit), <strong>congestion control</strong></li>
+          <li>Bridge between application layer and network layer</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l12)">2 · TCP vs. UDP</div>
+        <table class="comp-table">
+          <tr><th>Feature</th><th>TCP</th><th>UDP</th></tr>
+          <tr><td>Reliability</td><td>Reliable, in-order delivery</td><td>Unreliable, unordered</td></tr>
+          <tr><td>Connection</td><td>Connection-oriented (handshake)</td><td>Connectionless</td></tr>
+          <tr><td>Flow control</td><td>Yes (rwnd)</td><td>No</td></tr>
+          <tr><td>Congestion ctrl</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Direction</td><td>Full duplex (point-to-point)</td><td>Any</td></tr>
+          <tr><td>Use cases</td><td>Web, email, file transfer</td><td>Streaming, gaming, DNS</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l12)">3 · Reliable Data Transfer (RDT)</div>
+        <ul class="topic-points">
+          <li><strong>rdt1.0</strong>: perfect channel — no errors, no loss</li>
+          <li><strong>rdt2.0</strong>: channel with bit errors → add <strong>ACK</strong> (positive) and <strong>NAK</strong> (negative)</li>
+          <li><strong>rdt3.0</strong>: errors AND loss → add <strong>timeout-based retransmission</strong></li>
+          <li>rdt3.0 is correct but slow (stop-and-wait) → solution: <strong>pipelining</strong></li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l12)">4 · Go-Back-N vs. Selective Repeat</div>
+        <table class="comp-table">
+          <tr><th>Feature</th><th>Go-Back-N (GBN)</th><th>Selective Repeat (SR)</th></tr>
+          <tr><td>Window size</td><td>Up to N unACKed in pipeline</td><td>Up to N unACKed in pipeline</td></tr>
+          <tr><td>ACK type</td><td>Cumulative ACK only (no gap tolerated)</td><td>Individual ACK per packet</td></tr>
+          <tr><td>Out-of-order pkts</td><td>DISCARDED at receiver</td><td>BUFFERED at receiver</td></tr>
+          <tr><td>On timeout</td><td>Retransmit ALL unACKed (from lost)</td><td>Retransmit ONLY the lost packet</td></tr>
+          <tr><td>Timer</td><td>One timer for oldest unACKed</td><td>Individual timer per unACKed packet</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l12)">5 · TCP Connection Management</div>
+        <ul class="topic-points">
+          <li><strong>Three-Way Handshake (setup)</strong>:</li>
+        </ul>
+        <ul class="sub-points">
+          <li>Client → Server: <code>SYN=1, seq=client_isn</code></li>
+          <li>Server → Client: <code>SYN=1, ACK=1, seq=server_isn, ack=client_isn+1</code></li>
+          <li>Client → Server: <code>SYN=0, ACK=1, seq=client_isn+1, ack=server_isn+1</code> → ESTABLISHED</li>
+        </ul>
+        <ul class="topic-points">
+          <li><strong>Four-Way Handshake (teardown)</strong>:</li>
+        </ul>
+        <ul class="sub-points">
+          <li>Client → Server: FIN</li>
+          <li>Server → Client: ACK</li>
+          <li>Server → Client: FIN</li>
+          <li>Client → Server: ACK → TIMED WAIT → CLOSED (resources deallocated)</li>
+        </ul>
+        <ul class="topic-points">
+          <li><strong>Flow control</strong>: receiver advertises <strong>rwnd</strong> (receive window) to prevent buffer overflow</li>
+          <li><strong>MSS</strong> = Maximum Segment Size; socket = door between app and TCP</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l12)">❓ Multiple Choice Questions (50)</div>
+    <div class="qa-controls" style="margin-bottom:14px">
+      <button class="btn btn-reveal" onclick="revealAll('l12-mcq')">Show All Answers</button>
+      <button class="btn btn-hide" onclick="hideAll('l12-mcq')">Hide All</button>
+    </div>
+    <div class="q-grid" id="l12-mcq"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l12)">✅ True / False Questions (10)</div>
+    <div class="qa-controls" style="margin-bottom:14px">
+      <button class="btn btn-reveal" onclick="revealAllTF('l12-tf')">Reveal All</button>
+      <button class="btn btn-hide" onclick="hideAllTF('l12-tf')">Hide All</button>
+    </div>
+    <div class="tf-grid" id="l12-tf"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     LECTURE 13 — APPLICATION LAYER
+═══════════════════════════════════════════ -->
+<div id="panel-l13" class="lecture-panel">
+  <div class="lec-header">
+    <div class="lec-badge" style="background:rgba(255,166,87,0.1);border:1px solid rgba(255,166,87,0.3);">📒</div>
+    <div class="lec-meta">
+      <div class="lec-num" style="color:var(--accent-l13)">Lecture 13</div>
+      <div class="lec-title">Application Layer</div>
+      <div class="lec-desc">HTTP · Non/Persistent Connections · Cookies · DNS</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l13)">📋 Full Summary</div>
+    <div class="summary-grid">
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l13)">1 · Web & HTTP</div>
+        <ul class="topic-points">
+          <li>Web page = <strong>objects</strong> (HTML, JPEG, JS, audio…) referenced by a <strong>base HTML file</strong></li>
+          <li>Each object addressed by a <strong>URL</strong> = hostname + path</li>
+          <li><strong>HTTP</strong> = HyperText Transfer Protocol — web's application layer protocol</li>
+          <li>Uses <strong>TCP port 80</strong>; client (browser) initiates connection</li>
+          <li>HTTP is <strong>stateless</strong> — server maintains NO info about past client requests</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l13)">2 · Non-Persistent vs. Persistent Connections</div>
+        <table class="comp-table">
+          <tr><th>Feature</th><th>Non-Persistent</th><th>Persistent</th></tr>
+          <tr><td>TCP connection</td><td>New connection per request/response</td><td>One connection, multiple requests</td></tr>
+          <tr><td>Latency</td><td>Higher (TCP setup overhead per object)</td><td>Lower (no repeated setup)</td></tr>
+          <tr><td>Resource use</td><td>Higher (frequent open/close)</td><td>Lower</td></tr>
+          <tr><td>Complexity</td><td>Simple</td><td>More complex (server manages state)</td></tr>
+          <tr><td>Best for</td><td>Minimal requests</td><td>Modern web with many objects</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l13)">3 · HTTP Messages & Status Codes</div>
+        <ul class="topic-points">
+          <li><strong>Request message</strong>: request line (method URL version) + header lines + blank line + entity body</li>
+          <li>Methods: <strong>GET</strong> (retrieve, empty body), <strong>POST</strong> (data in body), HEAD, PUT (upload), DELETE</li>
+          <li><strong>Response message</strong>: status line (version code phrase) + header lines + blank line + entity body</li>
+          <li>Status codes: <code>200 OK</code> · <code>301 Moved Permanently</code> · <code>400 Bad Request</code> · <code>404 Not Found</code> · <code>505 HTTP Version Not Supported</code></li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l13)">4 · Cookies</div>
+        <ul class="topic-points">
+          <li>Allow stateless HTTP servers to identify/track users</li>
+          <li><strong>4 components</strong>: (1) Set-cookie header in response; (2) cookie header in request; (3) cookie file on user's browser; (4) back-end database at web site</li>
+          <li>Uses: authorization, shopping carts, session state, recommendations</li>
+        </ul>
+      </div>
+
+      <div class="topic-card">
+        <div class="topic-card-title" style="color:var(--accent-l13)">5 · DNS — Domain Name System</div>
+        <ul class="topic-points">
+          <li>Translates human-readable <strong>hostnames → IP addresses</strong></li>
+          <li>DNS is a <strong>distributed database</strong> in a hierarchy of DNS servers + application-layer protocol</li>
+          <li><strong>3 classes of DNS servers</strong>:</li>
+        </ul>
+        <ul class="sub-points">
+          <li><strong>Root DNS servers</strong>: 13 servers (A–M); return TLD server addresses</li>
+          <li><strong>TLD servers</strong>: handle .com, .org, .edu, country codes; return authoritative server addresses</li>
+          <li><strong>Authoritative servers</strong>: organization's own servers; return final IP</li>
+        </ul>
+        <ul class="topic-points">
+          <li><strong>Local DNS server</strong>: each ISP has one; acts as proxy; has local cache; not strictly in hierarchy</li>
+          <li><strong>Why not centralize DNS?</strong> Single point of failure, traffic volume, distant DB, maintenance</li>
+          <li>Resolution flow: root → TLD → authoritative → IP returned to client</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l13)">❓ Multiple Choice Questions (50)</div>
+    <div class="qa-controls" style="margin-bottom:14px">
+      <button class="btn btn-reveal" onclick="revealAll('l13-mcq')">Show All Answers</button>
+      <button class="btn btn-hide" onclick="hideAll('l13-mcq')">Hide All</button>
+    </div>
+    <div class="q-grid" id="l13-mcq"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" style="color:var(--accent-l13)">✅ True / False Questions (12)</div>
+    <div class="qa-controls" style="margin-bottom:14px">
+      <button class="btn btn-reveal" onclick="revealAllTF('l13-tf')">Reveal All</button>
+      <button class="btn btn-hide" onclick="hideAllTF('l13-tf')">Hide All</button>
+    </div>
+    <div class="tf-grid" id="l13-tf"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     QUICK REFERENCE
+═══════════════════════════════════════════ -->
+<div id="panel-ref" class="lecture-panel">
+  <div class="lec-header">
+    <div class="lec-badge" style="background:rgba(227,179,65,0.1);border:1px solid rgba(227,179,65,0.3);">📌</div>
+    <div class="lec-meta">
+      <div class="lec-num" style="color:var(--highlight)">Quick Reference</div>
+      <div class="lec-title">Key Facts, Numbers & Formulas</div>
+      <div class="lec-desc">Everything you need to memorize for the exam</div>
+    </div>
+  </div>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <div class="ref-card-title">IP Addressing</div>
+      <div class="ref-item"><span class="ref-label">IPv4 address size</span><span class="ref-value">32 bits</span></div>
+      <div class="ref-item"><span class="ref-label">IPv4 address space</span><span class="ref-value">2³² = 4,294,967,296</span></div>
+      <div class="ref-item"><span class="ref-label">IPv6 address size</span><span class="ref-value">128 bits</span></div>
+      <div class="ref-item"><span class="ref-label">IPv4 max datagram</span><span class="ref-value">65,535 bytes</span></div>
+      <div class="ref-item"><span class="ref-label">Typical datagram</span><span class="ref-value">≤ 1,500 bytes</span></div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-title">Classful Addressing</div>
+      <div class="ref-item"><span class="ref-label">Class A range</span><span class="ref-value">0–127 | /8</span></div>
+      <div class="ref-item"><span class="ref-label">Class B range</span><span class="ref-value">128–191 | /16</span></div>
+      <div class="ref-item"><span class="ref-label">Class C range</span><span class="ref-value">192–223 | /24</span></div>
+      <div class="ref-item"><span class="ref-label">Class D (multicast)</span><span class="ref-value">224–239</span></div>
+      <div class="ref-item"><span class="ref-label">Class E (reserved)</span><span class="ref-value">240–255</span></div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-title">IPv4 Protocol Field</div>
+      <div class="ref-item"><span class="ref-label">TCP</span><span class="ref-value">6</span></div>
+      <div class="ref-item"><span class="ref-label">UDP</span><span class="ref-value">17</span></div>
+      <div class="ref-item"><span class="ref-label">HTTP port</span><span class="ref-value">80</span></div>
+      <div class="ref-item"><span class="ref-label">HTTPS port</span><span class="ref-value">443</span></div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-title">CIDR Formulas</div>
+      <div class="ref-item"><span class="ref-label">Block size</span><span class="ref-value">2^(32−n)</span></div>
+      <div class="ref-item"><span class="ref-label">Usable hosts</span><span class="ref-value">2^(32−n) − 2</span></div>
+      <div class="ref-item"><span class="ref-label">First address</span><span class="ref-value">rightmost (32−n) bits = 0</span></div>
+      <div class="ref-item"><span class="ref-label">Last address</span><span class="ref-value">rightmost (32−n) bits = 1</span></div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-title">Routing Algorithms</div>
+      <div class="ref-item"><span class="ref-label">Dijkstra update</span><span class="ref-value">D(v)=min(D(v), D(w)+c(w,v))</span></div>
+      <div class="ref-item"><span class="ref-label">Bellman-Ford</span><span class="ref-value">Dx(y)=min{c(x,v)+Dv(y)}</span></div>
+      <div class="ref-item"><span class="ref-label">LS algorithm</span><span class="ref-value">Dijkstra's</span></div>
+      <div class="ref-item"><span class="ref-label">DV algorithm uses</span><span class="ref-value">Bellman-Ford</span></div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-title">TCP Handshakes</div>
+      <div class="ref-item"><span class="ref-label">Connection setup</span><span class="ref-value">3-way: SYN→SYN-ACK→ACK</span></div>
+      <div class="ref-item"><span class="ref-label">Connection teardown</span><span class="ref-value">4-way: FIN→ACK→FIN→ACK</span></div>
+      <div class="ref-item"><span class="ref-label">MSS</span><span class="ref-value">Maximum Segment Size</span></div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-title">DHCP Process (DORA)</div>
+      <div class="ref-item"><span class="ref-label">1. Discover</span><span class="ref-value">Client broadcasts</span></div>
+      <div class="ref-item"><span class="ref-label">2. Offer</span><span class="ref-value">Server broadcasts IP offer</span></div>
+      <div class="ref-item"><span class="ref-label">3. Request</span><span class="ref-value">Client broadcasts acceptance</span></div>
+      <div class="ref-item"><span class="ref-label">4. ACK</span><span class="ref-value">Server confirms</span></div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-title">DNS Hierarchy</div>
+      <div class="ref-item"><span class="ref-label">Root servers</span><span class="ref-value">13 (A–M)</span></div>
+      <div class="ref-item"><span class="ref-label">TLD servers</span><span class="ref-value">.com .org .edu + ccTLDs</span></div>
+      <div class="ref-item"><span class="ref-label">Authoritative</span><span class="ref-value">Organization's own servers</span></div>
+      <div class="ref-item"><span class="ref-label">Local DNS</span><span class="ref-value">First queried; not in hierarchy</span></div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-title">HTTP Status Codes</div>
+      <div class="ref-item"><span class="ref-label">200</span><span class="ref-value">OK</span></div>
+      <div class="ref-item"><span class="ref-label">301</span><span class="ref-value">Moved Permanently</span></div>
+      <div class="ref-item"><span class="ref-label">400</span><span class="ref-value">Bad Request</span></div>
+      <div class="ref-item"><span class="ref-label">404</span><span class="ref-value">Not Found</span></div>
+      <div class="ref-item"><span class="ref-label">505</span><span class="ref-value">HTTP Version Not Supported</span></div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-title">IPv6 Key Facts</div>
+      <div class="ref-item"><span class="ref-label">Header size</span><span class="ref-value">Fixed 40 bytes</span></div>
+      <div class="ref-item"><span class="ref-label">Hop Limit ≡</span><span class="ref-value">TTL in IPv4</span></div>
+      <div class="ref-item"><span class="ref-label">Flow Label</span><span class="ref-value">20 bits</span></div>
+      <div class="ref-item"><span class="ref-label">Fragmentation</span><span class="ref-value">Source/dest only (not routers)</span></div>
+      <div class="ref-item"><span class="ref-label">:: rule</span><span class="ref-value">Can only be used ONCE</span></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════════════
+const DATA = {
+  'l9-mcq': [
+    {q:"The network layer is responsible for",opts:["Delivering frames between adjacent nodes","Delivering packets between endpoints over multiple links","Managing application-level connections","Encrypting data for security"],ans:"B"},
+    {q:"Which is a key function of the network layer?",opts:["Error detection using parity bits","Forwarding packets from input to output","Managing user sessions","Converting binary to analog signals"],ans:"B"},
+    {q:"Forwarding in the network layer means:",opts:["Determining the full route from source to destination","Moving packets from a router's input to the appropriate output","Establishing connections before sending data","Sending packets back to the sender on errors"],ans:"B"},
+    {q:"Routing in the network layer means:",opts:["Moving packets from input to output port locally","Determining the path packets take from source to destination","Converting between IPv4 and IPv6","Fragmenting large packets"],ans:"B"},
+    {q:"Every router contains a:",opts:["Session table","MAC address table","Forwarding table","Transport table"],ans:"C"},
+    {q:"A router forwards a packet by:",opts:["Checking the packet's checksum","Examining a value in the packet's header and indexing its forwarding table","Broadcasting to all connected nodes","Waiting for an acknowledgment"],ans:"B"},
+    {q:"Which service guarantees that a packet will eventually arrive at its destination?",opts:["In-order delivery","Guaranteed delivery","Guaranteed maximum jitter","Security service"],ans:"B"},
+    {q:"Guaranteed delivery with bounded delay guarantees delivery within:",opts:["The maximum possible time","A specified host-to-host delay bound","One second","The time it takes for one packet"],ans:"B"},
+    {q:"In-order packet delivery ensures:",opts:["Packets arrive without errors","Packets arrive in the same order they were sent","Packets are encrypted","Packets are compressed"],ans:"B"},
+    {q:"The guaranteed maximum jitter service ensures:",opts:["Packets arrive in order","The inter-packet spacing at sender equals that at receiver","Packets are delivered within 100 ms","The network layer provides encryption"],ans:"B"},
+    {q:"Networks providing only connection-oriented service at the network layer are called:",opts:["Datagram networks","Virtual-circuit (VC) networks","Packet-switched networks","Connectionless networks"],ans:"B"},
+    {q:"Networks providing only connectionless service at the network layer are called:",opts:["Virtual-circuit networks","Connection-oriented networks","Datagram networks","Token ring networks"],ans:"C"},
+    {q:"Which real-world system is analogous to a virtual-circuit network?",opts:["The postal system","The Internet","The telephone system","Wi-Fi"],ans:"C"},
+    {q:"IP (Internet Protocol) is the dominant example of a:",opts:["Virtual-circuit network","Datagram network","Connection-oriented network","Circuit-switched network"],ans:"B"},
+    {q:"In a datagram network, packets:",opts:["Always follow the same pre-established route","Are injected individually and routed independently","Require a connection setup before being sent","Cannot be fragmented"],ans:"B"},
+    {q:"In a virtual-circuit network, the route is:",opts:["Chosen independently for each packet","Chosen at connection setup time and stored in routers","Never stored in routers","Determined by the destination host"],ans:"B"},
+    {q:"In a VC network, each packet's header contains:",opts:["The full source and destination IP addresses","A short VC number","The router's MAC address","A checksum field"],ans:"B"},
+    {q:"In a datagram network, each packet's header contains:",opts:["A short VC number","The full source and destination addresses","Only the destination MAC address","A connection ID"],ans:"B"},
+    {q:"When a router fails in a datagram network:",opts:["All ongoing connections are terminated","Only packets in transit at that router are lost","The entire network crashes","VC numbers are reassigned"],ans:"B"},
+    {q:"When a router fails in a VC network:",opts:["Only packets in transit are lost","Nothing happens","All VCs passing through the failed router are terminated","The VC number is transferred"],ans:"C"},
+    {q:"QoS is easier to implement in:",opts:["Datagram networks","Virtual-circuit networks","The Internet","Wireless networks"],ans:"B"},
+    {q:"A graph G = (N, E) used for routing has:",opts:["N = links, E = routers","N = routers, E = links","N = packets, E = paths","N = edges, E = vertices"],ans:"B"},
+    {q:"The cost of an edge in a routing graph may represent:",opts:["Physical length, link speed, or monetary cost","Packet size","Number of routers","TTL value"],ans:"A"},
+    {q:"If pair (x,y) does not belong to E, then c(x,y) =",opts:["0","1","infinity","-1"],ans:"C"},
+    {q:"Node y is a neighbor of node x if:",opts:["They are on the same subnet","The pair (x,y) belongs to E","They share the same IP prefix","They have the same default gateway"],ans:"B"},
+    {q:"The least-cost path is:",opts:["The path with fewest hops","The path with the minimum total edge cost","The path that avoids congestion","The path established during connection setup"],ans:"B"},
+    {q:"If all edges have equal cost, the least-cost path is also called:",opts:["Virtual path","Shortest path (fewest hops)","Optimal path","Direct path"],ans:"B"},
+    {q:"Dijkstra's algorithm is also known as:",opts:["Distance Vector Algorithm","Bellman-Ford Algorithm","Link-State Routing Algorithm","Flooding Algorithm"],ans:"C"},
+    {q:"In Dijkstra's algorithm, D(v) represents:",opts:["The number of hops to v","The current best known cost from source to v","The predecessor of v","The set of confirmed nodes"],ans:"B"},
+    {q:"In Dijkstra's algorithm, N' represents:",opts:["All nodes in the network","The set of nodes whose least-cost path is definitively known","The set of unvisited nodes","The neighbor set of the source"],ans:"B"},
+    {q:"In Dijkstra's initialization, D(v) for a non-neighbor node v is set to:",opts:["0","1","infinity","c(u,v)"],ans:"C"},
+    {q:"In Dijkstra's loop, the node w chosen to add to N' is:",opts:["Any unvisited node","The node w ∉ N' with minimum D(w)","The node with maximum D(w)","The node adjacent to the source"],ans:"B"},
+    {q:"Dijkstra's update formula is:",opts:["D(v) = D(v) + c(w,v)","D(v) = min(D(v), D(w) + c(w,v))","D(v) = D(w) * c(w,v)","D(v) = max(D(v), D(w))"],ans:"B"},
+    {q:"After Dijkstra's algorithm completes, we can construct:",opts:["The VC table","The routing forwarding table for the source node","The ARP cache","The DHCP lease"],ans:"B"},
+    {q:"The forwarding table stores for each destination:",opts:["The full path","The next-hop node on the least-cost path","The VC number","The MAC address"],ans:"B"},
+    {q:"The default router of a host is also called:",opts:["The destination router","The first-hop router","The last-hop router","The ISP router"],ans:"B"},
+    {q:"Types of routing algorithms listed in the lecture include:",opts:["OSPF, BGP, RIP only","Shortest Path, Distance Vector, Link State, Hierarchical, Broadcast, Multicast, Anycast","TCP, UDP, IP","NAT, DHCP, ARP"],ans:"B"},
+    {q:"The path cost is calculated as:",opts:["The number of edges","The sum of costs of all edges on the path","The maximum edge cost","The minimum edge cost"],ans:"B"},
+    {q:"A datagram network is like:",opts:["The telephone system","A postal/mail delivery service","A circuit-switched telephone call","A dedicated fiber connection"],ans:"B"},
+    {q:"In routing, the source router is:",opts:["The last router before the destination","The default router of the source host","The ISP's main router","Any router in the path"],ans:"B"},
+    {q:"Congestion control is more difficult in:",opts:["Virtual-circuit networks","Datagram networks","Connection-oriented networks","ATM networks"],ans:"B"},
+    {q:"Packets in the network layer are called:",opts:["Frames","Segments","Datagrams or packets","Bits"],ans:"C"},
+    {q:"End system H1 in a typical network model implements:",opts:["Only the network layer","All five layers (Application through Physical)","Only Transport and Network","Only Link and Physical layers"],ans:"B"},
+    {q:"A router implements which layers?",opts:["All five layers","Network, Link, and Physical layers only","Application and Transport layers","Transport and Network layers"],ans:"B"},
+    {q:"In Dijkstra's algorithm, p(v) represents:",opts:["The cost to reach v","The predecessor of v on the least-cost path","The set of nodes confirmed so far","The priority queue index"],ans:"B"},
+    {q:"Which is NOT a service provided by the network layer?",opts:["Guaranteed delivery","In-order packet delivery","Three-way handshake","Security services via encryption"],ans:"C"},
+    {q:"What does connection-oriented service at the network layer mean?",opts:["Transport layer establishes TCP","A path is set up at network layer before data is sent","Application layer manages sessions","Link layer confirms each frame"],ans:"B"},
+    {q:"In a VC network routing table, what is stored per virtual circuit?",opts:["Full IP addresses","In-port, VC-in, Out-port, VC-out mapping","Only destination IP","Only source MAC"],ans:"B"},
+    {q:"Who determines the path in a datagram network for each packet?",opts:["The source host","Each router independently based on its forwarding table","The destination host","The ISP"],ans:"B"},
+    {q:"The least-cost path from u to w in the lecture example graph is (u, x, y, w) with cost:",opts:["3","5","7","10"],ans:"A"},
+  ],
+  'l9-tf': [
+    {q:"The network layer is responsible for delivering packets between endpoints over multiple links.",ans:true,exp:"This is the core definition of the network layer."},
+    {q:"Forwarding is a network-wide process while routing is a local per-router process.",ans:false,exp:"It's the opposite: forwarding is local (per-router), routing is network-wide."},
+    {q:"Every router has a forwarding table.",ans:true,exp:"Routers use forwarding tables to direct packets to the correct output."},
+    {q:"Virtual-circuit networks provide a connectionless service.",ans:false,exp:"VC networks provide connection-oriented service."},
+    {q:"IP is the dominant example of a datagram (connectionless) network.",ans:true,exp:"IP is connectionless and routes each packet independently."},
+    {q:"In a datagram network, a path must be established before packets can be sent.",ans:false,exp:"Datagram networks require no advance setup; packets are injected individually."},
+    {q:"In Dijkstra's algorithm, all nodes have equal least-cost path certainty after initialization.",ans:false,exp:"Only the source node is in N' after initialization."},
+    {q:"If all edge costs are equal, the least-cost path equals the shortest path.",ans:true,exp:"When costs are equal, minimizing cost = minimizing hops."},
+    {q:"The cost of an edge in a routing graph can represent physical length, link speed, or monetary cost.",ans:true,exp:"All three are valid cost metrics."},
+    {q:"The default router is also called the destination router for the host.",ans:false,exp:"It is called the first-hop router or source router, not destination router."},
+  ],
+
+  'l10-mcq': [
+    {q:"The Bellman-Ford equation used in DV routing is:",opts:["Dx(y) = min{c(x,v) + Dv(y)}","Dx(y) = max{c(x,v) - Dv(y)}","Dx(y) = sum{c(x,v) * Dv(y)}","Dx(y) = c(x,y) / Dv(y)"],ans:"A"},
+    {q:"In the DV algorithm, each node sends its distance vector to:",opts:["All nodes in the network","Only its direct neighbors","The gateway router only","The ISP only"],ans:"B"},
+    {q:"When node x receives a new DV from neighbor v, it:",opts:["Sends it to all other nodes","Updates its own DV using the Bellman-Ford equation","Discards it if no change","Resets its own DV to infinity"],ans:"B"},
+    {q:"The DV algorithm reaches a 'quiescent state' when:",opts:["All nodes have the same DV","No update messages are sent","All link costs become 0","The algorithm is stopped externally"],ans:"B"},
+    {q:"The 'count-to-infinity' problem occurs when:",opts:["Link costs are too high","Bad news (cost increase) propagates slowly","Too many nodes exist","Link state floods the network"],ans:"B"},
+    {q:"The two main reasons flat routing doesn't scale are:",opts:["Speed and cost","Scale and administrative autonomy","Security and reliability","Bandwidth and latency"],ans:"B"},
+    {q:"An Autonomous System (AS) is:",opts:["A single router with multiple interfaces","A group of routers under the same administrative control","An algorithm for routing between routers","A type of datagram network"],ans:"B"},
+    {q:"The routing protocol running within an AS is called:",opts:["Inter-AS routing protocol","BGP","Intra-autonomous system routing protocol","HTTP"],ans:"C"},
+    {q:"Gateway routers in an AS are responsible for:",opts:["Running the intra-AS protocol only","Forwarding packets to destinations OUTSIDE the AS","Generating IP addresses for hosts","Performing NAT translation"],ans:"B"},
+    {q:"Examples of intra-AS routing protocols include:",opts:["HTTP, SMTP, FTP","RIP, OSPF","NAT, DHCP","BGP, TCP"],ans:"B"},
+    {q:"The Internet's network layer has three major components:",opts:["TCP, UDP, HTTP","IP protocol, Routing protocols, ICMP protocol","IPv4, IPv6, ICMP","NAT, DHCP, ARP"],ans:"B"},
+    {q:"An IPv4 address is:",opts:["64 bits long","32 bits long","128 bits long","16 bits long"],ans:"B"},
+    {q:"The total IPv4 address space contains:",opts:["2^16 addresses","2^32 = 4,294,967,296 addresses","2^64 addresses","2^128 addresses"],ans:"B"},
+    {q:"IPv4 addresses are written in:",opts:["Hexadecimal colon-separated notation","Binary with dashes","Dotted-decimal notation","Octal notation"],ans:"C"},
+    {q:"The Version field in the IPv4 header is:",opts:["16 bits","8 bits","4 bits","32 bits"],ans:"C"},
+    {q:"The Header Length field in IPv4 is needed because:",opts:["The header contains the TTL","Options make the header variable-length","The data length varies","The version can be 4 or 6"],ans:"B"},
+    {q:"The Type of Service (TOS) field in IPv4:",opts:["Identifies the transport-layer protocol","Allows different datagrams to be distinguished (real-time vs. FTP)","Specifies the datagram length","Contains the source IP address"],ans:"B"},
+    {q:"The maximum theoretical size of an IPv4 datagram is:",opts:["255 bytes","1,500 bytes","65,535 bytes","4,294,967,295 bytes"],ans:"C"},
+    {q:"In practice, datagrams are rarely larger than:",opts:["64 bytes","256 bytes","1,500 bytes","65,535 bytes"],ans:"C"},
+    {q:"The TTL field prevents:",opts:["Packet reordering","Datagrams from circulating forever due to routing loops","Bit errors in headers","Fragmentation"],ans:"B"},
+    {q:"What happens when the TTL field reaches 0?",opts:["The datagram is retransmitted","The datagram is dropped","The datagram is fragmented","The TTL is reset to 255"],ans:"B"},
+    {q:"Protocol field value 6 in IPv4 indicates:",opts:["UDP","TCP","ICMP","ARP"],ans:"B"},
+    {q:"Protocol field value 17 in IPv4 indicates:",opts:["TCP","ICMP","UDP","HTTP"],ans:"C"},
+    {q:"The Header Checksum in IPv4 is used to:",opts:["Detect bit errors in the IP header","Verify data integrity","Authenticate the sender","Check the TTL value"],ans:"A"},
+    {q:"The Fragmentation Offset field specifies:",opts:["How many fragments exist","Where this fragment fits within the original datagram","The size of the last fragment","The identification number"],ans:"B"},
+    {q:"MTU (Maximum Transmission Unit) is:",opts:["Maximum size of an IP header","Maximum amount of data a link-layer frame can carry","Maximum number of packets per second","Maximum TTL value"],ans:"B"},
+    {q:"IP datagram reassembly occurs at:",opts:["The first router on the path","Each intermediate router","The destination host only","The source host"],ans:"C"},
+    {q:"The LAST fragment of a fragmented datagram has its flag bit set to:",opts:["1","0","255","The fragment offset"],ans:"B"},
+    {q:"In the 4000-byte datagram example (MTU=1500), how many fragments are created?",opts:["2","3","4","5"],ans:"B"},
+    {q:"An interface is defined as:",opts:["The software running on a router","The boundary between a host/router and its physical link","The IP address of a router","The connection between two ASes"],ans:"B"},
+    {q:"An IP address is technically associated with:",opts:["A host","A router","An interface (not the device containing it)","A MAC address"],ans:"C"},
+    {q:"How many interfaces does a router with 4 connected links have?",opts:["1","2","4","8"],ans:"C"},
+    {q:"In classful addressing, how many classes exist?",opts:["3 (A, B, C)","4 (A, B, C, D)","5 (A, B, C, D, E)","6"],ans:"C"},
+    {q:"A Class A address has its first bit set to:",opts:["1","0","10","110"],ans:"B"},
+    {q:"The first byte range for Class A addresses is:",opts:["0–127","128–191","192–223","224–239"],ans:"A"},
+    {q:"The first byte range for Class B addresses is:",opts:["0–127","128–191","192–223","224–239"],ans:"B"},
+    {q:"The first byte range for Class C addresses is:",opts:["0–127","128–191","192–223","224–239"],ans:"C"},
+    {q:"Class D addresses are reserved for:",opts:["Large organizations","Multicast","Future/experimental use","Small networks"],ans:"B"},
+    {q:"In a Class A address, how many bytes define the netid?",opts:["1 byte","2 bytes","3 bytes","4 bytes"],ans:"A"},
+    {q:"In a Class B address, the netid and hostid are each:",opts:["1 byte and 3 bytes","2 bytes and 2 bytes","3 bytes and 1 byte","All 4 bytes for netid"],ans:"B"},
+    {q:"Class C is designed for networks with:",opts:["More than 65,536 hosts","256 to 65,534 hosts","Fewer than 254 hosts","Exactly 128 hosts"],ans:"C"},
+    {q:"The default mask for Class A is:",opts:["/8 = 255.0.0.0","/16 = 255.255.0.0","/24 = 255.255.255.0","/32 = 255.255.255.255"],ans:"A"},
+    {q:"The default mask for Class B is:",opts:["/8 = 255.0.0.0","/16 = 255.255.0.0","/24 = 255.255.255.0","/32"],ans:"B"},
+    {q:"The default mask for Class C is:",opts:["/8","/16","/24 = 255.255.255.0","/32"],ans:"C"},
+    {q:"CIDR notation '/n' means:",opts:["The last n bits are the network portion","The first n bits are the network prefix","There are n hosts in the network","The address uses n bytes"],ans:"B"},
+    {q:"A subnet mask is created by:",opts:["Setting all bits to 1","Setting host bits to 0 and network bits to 1","Setting network bits to 0 and host bits to 1","Alternating 0s and 1s"],ans:"B"},
+    {q:"The '255' address in any subnet is always the:",opts:["First host","Network address","Broadcast address","Default gateway"],ans:"C"},
+    {q:"The '0' address in any subnet is always the:",opts:["Last host","Network address","Broadcast address","Router"],ans:"B"},
+    {q:"Number of usable host addresses in a subnet is:",opts:["2^n","2^n - 1","2^n - 2","2^n + 2"],ans:"C"},
+    {q:"Which IPv4 header fields handle fragmentation?",opts:["Version, TTL, Protocol","16-bit Identifier, Flags, 13-bit Fragmentation Offset","Source IP, Destination IP, Checksum","TOS, Header length, Version"],ans:"B"},
+    {q:"The address 192.168.1.23 belongs to class:",opts:["A","B","C","D"],ans:"C"},
+    {q:"The address 14.23.120.8 belongs to class:",opts:["A","B","C","D"],ans:"A"},
+    {q:"The address 172.16.15.10 belongs to class:",opts:["A","B","C","D"],ans:"B"},
+    {q:"Given 192.168.1.23, what is the network ID (Class C)?",opts:["192.168.1.23","192.168.1.0","192.168.0.0","192.0.0.0"],ans:"B"},
+    {q:"The full subnet mask for 172.16.15.10/28 is:",opts:["255.255.255.0","255.255.255.128","255.255.255.240","255.255.0.0"],ans:"C"},
+    {q:"Dx(z) with x-y=2, y-z=1, x-z=7 after convergence:",opts:["7","3","8","1"],ans:"B"},
+    {q:"TTL field prevents routing loops — it is decremented by:",opts:["2 per router","1 per router","10 per hop","The number of remaining hops"],ans:"B"},
+    {q:"How many available networks does Class A provide?",opts:["126","16,384","2,097,152","1"],ans:"A"},
+    {q:"How many hosts per network does Class A support?",opts:["254","65,534","16,777,214","256"],ans:"C"},
+    {q:"How many hosts per network does Class B support?",opts:["254","65,534","16,777,214","256"],ans:"B"},
+    {q:"How many hosts per network does Class C support?",opts:["254","65,534","16,777,214","512"],ans:"A"},
+    {q:"Which of the following is a valid IPv4 dotted-decimal address?",opts:["111.56.045.78 (leading zero)","221.34.7.8.20 (5 octets)","75.45.301.14 (>255)","128.11.11.239"],ans:"D"},
+    {q:"Inter-AS routing determines:",opts:["How packets are forwarded within an AS","How packets flow between different ASes","How forwarding table is built locally","How TTL is decremented"],ans:"B"},
+    {q:"Link-State algorithm (Dijkstra) requires:",opts:["Less information than DV","Complete network topology knowledge by all nodes","No periodic updates","Only local computation"],ans:"B"},
+  ],
+  'l10-tf': [
+    {q:"In the DV algorithm, each node sends its DV to all nodes in the network.",ans:false,exp:"Nodes only send their DV to direct neighbors."},
+    {q:"The Bellman-Ford equation is: Dx(y) ← min_v{ c(x,v) + Dv(y) }.",ans:true,exp:"This is the exact formula used."},
+    {q:"An Autonomous System (AS) is a group of routers under the same administrative control.",ans:true,exp:"This is the definition of an AS."},
+    {q:"Gateway routers forward packets to destinations inside the AS only.",ans:false,exp:"Gateway routers handle traffic to destinations OUTSIDE the AS."},
+    {q:"The IPv4 datagram length field is 16 bits, giving a maximum of 65,535 bytes.",ans:true,exp:"2^16 - 1 = 65,535 bytes."},
+    {q:"The TTL field in an IPv4 datagram is incremented by 1 at each router.",ans:false,exp:"TTL is DECREMENTED by 1 at each router."},
+    {q:"Protocol value 6 in the IPv4 header means the payload is a TCP segment.",ans:true,exp:"6 = TCP, 17 = UDP."},
+    {q:"IP datagram reassembly happens at intermediate routers.",ans:false,exp:"Reassembly only happens at the destination host."},
+    {q:"The last fragment of a fragmented datagram has its flag bit set to 1.",ans:false,exp:"The LAST fragment has flag = 0; all others have flag = 1."},
+    {q:"In classful addressing, Class C is for large organizations with more than 65,536 hosts.",ans:false,exp:"Class C is for small organizations with fewer than 254 hosts."},
+    {q:"The default mask for Class B is /16 = 255.255.0.0.",ans:true,exp:"Class B has 2 network bytes and 2 host bytes."},
+    {q:"Class D addresses are reserved for multicast.",ans:true,exp:"Class D (224–239) is for multicast routing."},
+  ],
+
+  'l11-mcq': [
+    {q:"What led to the near depletion of IPv4 addresses?",opts:["Poor routing protocols","Flaws in classful addressing combined with rapid Internet growth","IPv6 adoption","Too many private addresses used"],ans:"B"},
+    {q:"In CIDR addressing, blocks are represented as:",opts:["x.y.z.t CLASS","x.y.z.t/n","x.y.z.t MASK n","x.y.z.t-n"],ans:"B"},
+    {q:"In CIDR notation x.y.z.t/n, the /n represents:",opts:["Number of hosts","Number of network prefix bits (leftmost bits = 1 in mask)","Number of subnets","The broadcast address"],ans:"B"},
+    {q:"The number of addresses in a CIDR /n block is:",opts:["n","2^n","2^(32-n)","32-n"],ans:"C"},
+    {q:"To find the first address in a CIDR block:",opts:["Set all 32 bits to 1","Set the rightmost (32-n) bits to 0","Set the leftmost n bits to 0","Add 1 to the last address"],ans:"B"},
+    {q:"To find the last address in a CIDR block:",opts:["Set all bits to 0","Set the leftmost n bits to 1","Set the rightmost (32-n) bits to 1","Subtract 1 from the first address"],ans:"C"},
+    {q:"Which is NOT a restriction on classless address blocks?",opts:["Addresses must be contiguous","Number of addresses must be a power of 2","First address divisible by block size","Block must belong to a single class"],ans:"D"},
+    {q:"Given 205.16.37.39/28, what is the first address?",opts:["205.16.37.32","205.16.37.39","205.16.37.47","205.16.37.0"],ans:"A"},
+    {q:"Given 205.16.37.39/28, what is the last address?",opts:["205.16.37.32","205.16.37.39","205.16.37.47","205.16.37.63"],ans:"C"},
+    {q:"How many addresses are in a /28 block?",opts:["4","8","16","32"],ans:"C"},
+    {q:"The network address of a block is:",opts:["The last address (all host bits = 1)","The first address (all host bits = 0), used as default gateway","The broadcast address","The address of the DHCP server"],ans:"B"},
+    {q:"The broadcast address of a block has:",opts:["All network bits set to 1","All host bits set to 0","All host bits set to 1","All bits set to 0"],ans:"C"},
+    {q:"Usable host addresses in a /26 block:",opts:["62","64","126","60"],ans:"A"},
+    {q:"IP address management is under the authority of:",opts:["ISPs","ICANN","DNS","NAT"],ans:"B"},
+    {q:"ICANN stands for:",opts:["International Corporation for Assigned Networks","Internet Corporation for Assigned Names and Numbers","Internet Control and Number Network","International Committee for Assigned Network Numbers"],ans:"B"},
+    {q:"NAT translates:",opts:["Public IP addresses to domain names","Private IP addresses to a single public IP address","IPv4 addresses to IPv6 addresses","MAC addresses to IP addresses"],ans:"B"},
+    {q:"Which is NOT a benefit of NAT?",opts:["Saves public IP addresses","Allows changing ISP without changing internal addresses","Increases network speed significantly","Hides internal addresses (security)"],ans:"C"},
+    {q:"The NAT router must do what with OUTGOING datagrams?",opts:["Replace destination IP with NAT IP","Replace source (IP, port#) with (NAT IP, new port#) and record in NAT table","Drop them if no port available","Fragment them automatically"],ans:"B"},
+    {q:"The NAT router must do what with INCOMING datagrams?",opts:["Broadcast to all local hosts","Replace (NAT IP, port#) in destination with original (source IP, port#) from NAT table","Increase TTL","Add them to routing table"],ans:"B"},
+    {q:"DHCP stands for:",opts:["Dynamic Host Configuration Protocol","Domain Host Control Protocol","Distributed Host Configuration Process","Dynamic HTTP Configuration Protocol"],ans:"A"},
+    {q:"DHCP is called 'plug-and-play' because:",opts:["It requires manual configuration","It automates network configuration when a host connects","It only works with wired connections","It is the same as ARP"],ans:"B"},
+    {q:"The first step in the DHCP process is:",opts:["DHCP Request","DHCP Offer","DHCP Discover","DHCP ACK"],ans:"C"},
+    {q:"DHCP Discover is sent to:",opts:["The specific DHCP server's IP","The broadcast address 255.255.255.255","The default gateway","The DNS server"],ans:"B"},
+    {q:"DHCP provides which information to a newly connected host?",opts:["Only the IP address","IP address, subnet mask, default gateway, DNS server address","Only IP address and subnet mask","IP address and MAC address mapping"],ans:"B"},
+    {q:"If no DHCP server is on the local subnet:",opts:["The host cannot get an IP","A DHCP relay agent (typically the router) forwards requests","The host uses a static IP","DHCP uses unicast instead"],ans:"B"},
+    {q:"The DHCP ACK message:",opts:["Initiates the DHCP process","Offers an IP to the client","Confirms that the client can use the offered IP","Requests an IP from the server"],ans:"C"},
+    {q:"ARP is used to:",opts:["Translate domain names to IP addresses","Map IP addresses to link-layer (MAC) addresses","Assign IP addresses to hosts","Fragment IP datagrams"],ans:"B"},
+    {q:"ICMP is used for:",opts:["Routing packets between routers","Communicating network-layer error and informational messages","Assigning IP addresses","Translating private to public addresses"],ans:"B"},
+    {q:"The 'ping' command uses which ICMP message type?",opts:["Error reporting — unreachable host","Query — echo request/reply","Error reporting — TTL exceeded","Fragmentation needed"],ans:"B"},
+    {q:"IPv6 expands the IP address size from 32 bits to:",opts:["64 bits","128 bits","256 bits","48 bits"],ans:"B"},
+    {q:"The IPv6 fixed header size is:",opts:["20 bytes","28 bytes","40 bytes","60 bytes"],ans:"C"},
+    {q:"The Flow Label field in IPv6 is:",opts:["4 bits","8 bits","16 bits","20 bits"],ans:"D"},
+    {q:"The Traffic Class field in IPv6 is similar to IPv4's:",opts:["Protocol","TTL","Type of Service (TOS)","Header checksum"],ans:"C"},
+    {q:"The Payload Length field in IPv6 gives:",opts:["The total datagram size","The number of bytes after the fixed 40-byte header","The number of headers","The hop count"],ans:"B"},
+    {q:"The Hop Limit field in IPv6 is equivalent to IPv4's:",opts:["Protocol","TTL","Header checksum","Flags"],ans:"B"},
+    {q:"IPv6 source and destination addresses are each:",opts:["32 bits","64 bits","128 bits","48 bits"],ans:"C"},
+    {q:"Which field was REMOVED from IPv4 when designing IPv6?",opts:["Source address","Destination address","Header checksum","Version"],ans:"C"},
+    {q:"Why was the Header Checksum removed in IPv6?",opts:["To save bandwidth since transport and link layers already do checksumming","To simplify the header","Both A and B","IPv6 doesn't need error checking"],ans:"C"},
+    {q:"In IPv6, fragmentation:",opts:["Is done at intermediate routers just like IPv4","Is done only by source/destination; not at intermediate routers","Is not supported at all","Uses the same fields as IPv4"],ans:"B"},
+    {q:"If an IPv6 datagram is too large for the next link, the router:",opts:["Fragments it","Drops it and sends a 'Packet Too Big' ICMP error to the sender","Increases the MTU","Queues it"],ans:"B"},
+    {q:"IPv6 notation groups 4 bits into one:",opts:["Decimal digit","Binary digit","Hexadecimal digit","Octal digit"],ans:"C"},
+    {q:"IPv6 groups of 4 hex digits are separated by:",opts:["Dots (.)","Dashes (-)","Colons (:)","Slashes (/)"],ans:"C"},
+    {q:"Shortening rule 1 for IPv6 allows removing:",opts:["Leading zeros only","ONE set of consecutive all-zero groups, replaced by ::","All zero groups each replaced by ::","Trailing zeros"],ans:"B"},
+    {q:"Why can :: only be applied ONCE in IPv6?",opts:["IPv6 addresses are too long","Applying it twice creates ambiguity about how many zeros were removed","It violates CIDR rules","Routers cannot process it"],ans:"B"},
+    {q:"The correct order of DHCP steps is:",opts:["Discover, ACK, Offer, Request","Discover, Offer, Request, ACK","Offer, Discover, Request, ACK","Request, Discover, Offer, ACK"],ans:"B"},
+    {q:"Private addresses cannot be used on the public Internet because:",opts:["They are not 32 bits","They are not globally unique and would cause routing confusion","They are reserved for IPv6","They require NAT on both ends"],ans:"B"},
+    {q:"What type of address has all host bits set to 0?",opts:["Broadcast address","Network address","Multicast address","Loopback address"],ans:"B"},
+    {q:"What type of address has all host bits set to 1?",opts:["Broadcast address","Network address","Multicast address","Unicast address"],ans:"A"},
+    {q:"A /20 CIDR block contains how many addresses?",opts:["1024","2048","4096","8192"],ans:"C"},
+    {q:"The 'anycast' address type in IPv6 routes to:",opts:["All nodes","One specific node","The nearest node in a group of nodes","A group of nodes (all receive it)"],ans:"C"},
+    {q:"The new 'anycast' address type was introduced in:",opts:["IPv4","IPv6","Both IPv4 and IPv6","Neither"],ans:"B"},
+    {q:"The usable host addresses in a /26 block = 2^(32-26) - 2 =",opts:["60","62","64","66"],ans:"B"},
+    {q:"NAT uses port numbers to:",opts:["Choose which protocol to use","Allow multiple devices to share one public IP by differentiating sessions by port","Fragment datagrams","Route packets within the AS"],ans:"B"},
+    {q:"The '0.0.0.0' address used as source in DHCP Discover means:",opts:["The client has no address yet","The address is invalid","The client is sending to itself","The gateway address"],ans:"A"},
+    {q:"ICMP error reporting for 'unreachable destination' could report which of these?",opts:["Echo reply only","Unreachable host, network, port, or protocol","TTL exceeded only","Both B and C"],ans:"D"},
+    {q:"Number of addresses allocated by ISP in the example (Groups 1+2+3):",opts:["16,384","32,768","40,960","65,536"],ans:"C"},
+    {q:"Available addresses remaining after ISP allocation example:",opts:["24,576","16,384","8,192","32,768"],ans:"A"},
+    {q:"In IPv6 shortening, trailing zeros in a group:",opts:["Can be removed","Cannot be removed","Are always replaced with ::","Are optional to remove"],ans:"B"},
+    {q:"The DV algorithm's quiescent state ends when:",opts:["A new node joins the network","A link cost changes","The AS is reconfigured","The algorithm is reset"],ans:"B"},
+    {q:"Which of the following is NOT a reason to avoid centralized DNS?",opts:["Single point of failure","Traffic volume","Fast response times for all users","Maintenance difficulty"],ans:"C"},
+    {q:"The number of usable hosts in a /28 block is:",opts:["12","14","16","18"],ans:"B"},
+    {q:"CIDR notation for Class C default mask is:",opts:["/8","/16","/24","/32"],ans:"C"},
+    {q:"IPv6 changes from IPv4 include expanded addressing, anycast, streamlined header, and:",opts:["Fragmentation at all routers","Header checksum addition","Flow labeling and priority","TTL removal"],ans:"C"},
+    {q:"In the ISP allocation example, Group 1 customers with 256 addresses each receive prefix:",opts:["/24","/25","/26","/28"],ans:"A"},
+  ],
+  'l11-tf': [
+    {q:"CIDR notation /n means the first n bits of the address are the network prefix.",ans:true,exp:"The /n prefix tells us how many leading bits belong to the network."},
+    {q:"In a /28 block, there are 8 addresses.",ans:false,exp:"A /28 block has 2^(32-28) = 2^4 = 16 addresses."},
+    {q:"The first address in a CIDR block is the broadcast address.",ans:false,exp:"The FIRST address is the network address; the LAST is the broadcast."},
+    {q:"NAT allows multiple devices on a private network to share a single public IP address.",ans:true,exp:"This is the primary purpose of NAT."},
+    {q:"DHCP provides the subnet mask, default gateway, and DNS server in addition to an IP address.",ans:true,exp:"DHCP provides all four pieces of network configuration information."},
+    {q:"DHCP Discover is sent as a unicast to a known DHCP server address.",ans:false,exp:"DHCP Discover is broadcast (255.255.255.255) since the client doesn't know the server address."},
+    {q:"ARP maps IP addresses to Ethernet (MAC) addresses.",ans:true,exp:"ARP resolves IP-to-MAC address mappings."},
+    {q:"In IPv6, fragmentation can be performed by intermediate routers.",ans:false,exp:"IPv6 fragmentation is done only by source/destination; intermediate routers drop oversized datagrams."},
+    {q:"IPv6 uses a fixed 40-byte header compared to IPv4's variable-length header.",ans:true,exp:"IPv6 removed options and has a fixed 40-byte header."},
+    {q:"The double colon :: in IPv6 shortening can be used more than once in an address.",ans:false,exp:":: can only be used once to avoid ambiguity."},
+    {q:"The number of usable host addresses in a /26 block is 62.",ans:true,exp:"2^(32-26) - 2 = 2^6 - 2 = 64 - 2 = 62."},
+    {q:"ICANN manages IP address allocation globally.",ans:true,exp:"ICANN oversees IP address allocation and DNS root servers."},
+  ],
+
+  'l12-mcq': [
+    {q:"The transport layer provides communication between:",opts:["Adjacent routers","Applications running on different end systems","Two subnets","Link-layer devices"],ans:"B"},
+    {q:"Which is NOT a service provided by the transport layer?",opts:["Flow control","Error control","IP address assignment","Congestion control"],ans:"C"},
+    {q:"TCP stands for:",opts:["Transmission Control Protocol","Transfer Control Procedure","Transport Connection Protocol","Transmission Connection Procedure"],ans:"A"},
+    {q:"UDP stands for:",opts:["Universal Datagram Protocol","User Datagram Protocol","Unreliable Data Process","Unified Datagram Protocol"],ans:"B"},
+    {q:"Which protocol is reliable and connection-oriented?",opts:["UDP","IP","TCP","HTTP"],ans:"C"},
+    {q:"Which protocol is fast, connectionless, with occasional data loss?",opts:["TCP","UDP","FTP","SMTP"],ans:"B"},
+    {q:"TCP provides:",opts:["Unreliable delivery only","Reliable in-order delivery, flow control, congestion control, connection setup","Connectionless fast delivery","MAC address resolution"],ans:"B"},
+    {q:"UDP is suitable for:",opts:["File transfers requiring reliability","Streaming audio/video where speed is critical","Email delivery","Secure banking transactions"],ans:"B"},
+    {q:"In rdt1.0, the underlying channel is:",opts:["Error-prone with packet loss","Perfectly reliable — no bit errors, no loss","Congested","Wireless"],ans:"B"},
+    {q:"In rdt2.0, what is introduced to handle bit errors?",opts:["Sequence numbers","ACK (positive acknowledgment) and NAK (negative acknowledgment)","Fragmentation","Pipelining"],ans:"B"},
+    {q:"ACK in rdt stands for:",opts:["Automatic Check Key","Positive Acknowledgment — receiver confirms packet received OK","Additional Check Bit","Automated Checksum"],ans:"B"},
+    {q:"NAK in rdt means:",opts:["Negative Acknowledgment — receiver reports packet had errors","Neutral Acknowledgment Key","Network Acknowledgment","No Acknowledgment Kept"],ans:"A"},
+    {q:"In rdt3.0, how does the sender handle packet loss?",opts:["Immediately retransmits","Waits a reasonable timeout; retransmits if no ACK received","Requests NAK from receiver","Drops the connection"],ans:"B"},
+    {q:"Pipelining means:",opts:["Sending one packet and waiting for ACK","Sender allows multiple in-flight unacknowledged packets simultaneously","Splitting data at routers","Forwarding packets on parallel paths"],ans:"B"},
+    {q:"Which pipelined protocol retransmits ALL unACKed packets on timeout?",opts:["Selective Repeat","rdt3.0","Go-Back-N (GBN)","Stop-and-Wait"],ans:"C"},
+    {q:"In Go-Back-N (GBN), the receiver sends:",opts:["Individual ACK for each packet","Cumulative ACK only; doesn't ACK if there's a gap","No ACK at all","NAK for every out-of-order packet"],ans:"B"},
+    {q:"In GBN, what happens to out-of-order packets at the receiver?",opts:["They are buffered","They are delivered immediately","They are discarded","They trigger immediate retransmission"],ans:"C"},
+    {q:"In Selective Repeat (SR), the receiver:",opts:["Sends cumulative ACK only","Buffers out-of-order packets and sends individual ACKs","Discards all out-of-order packets","Retransmits lost packets"],ans:"B"},
+    {q:"In Selective Repeat, on timeout the sender retransmits:",opts:["All unACKed packets","Only the specific unACKed packet whose timer expired","The entire window","The last ACKed packet again"],ans:"B"},
+    {q:"The window size N in GBN represents:",opts:["The number of bytes in each segment","Maximum number of unACKed packets allowed in pipeline","Number of routers between sender and receiver","The TTL value"],ans:"B"},
+    {q:"GBN uses a k-bit sequence number, allowing window size up to:",opts:["k","2^k","2^k - 1","2k"],ans:"C"},
+    {q:"TCP is best described as:",opts:["Point-to-multipoint, unreliable","Point-to-point, reliable, in-order byte stream, full duplex, flow-controlled","Connectionless, multicast","Circuit-switched"],ans:"B"},
+    {q:"MSS in TCP stands for:",opts:["Minimum Segment Size","Maximum Segment Size","Maximum Sender Speed","Managed Segment System"],ans:"B"},
+    {q:"TCP is full duplex, meaning:",opts:["One direction at a time only","Bidirectional data flow in the same connection simultaneously","Data flows from server to client only","Requires two separate connections"],ans:"B"},
+    {q:"Before TCP can exchange data, what must occur?",opts:["NAK must be sent","A three-way handshake to establish the connection","UDP must be set up first","IP addresses must be exchanged via DHCP"],ans:"B"},
+    {q:"In the TCP 3-way handshake, the first packet sent by the client has:",opts:["SYN=0, ACK=1","SYN=1, ACK=0 with initial sequence number (client_isn)","FIN=1","SYN=1, ACK=1"],ans:"B"},
+    {q:"The server's SYN-ACK response includes:",opts:["Only the server's ISN","SYN=1, ACK=1, server_isn, and ack=client_isn+1","FIN=1, SYN=0","SYN=0, ACK=1 only"],ans:"B"},
+    {q:"The third step of TCP 3-way handshake (client's ACK) has SYN bit:",opts:["SYN=1","SYN=0","SYN=2","SYN not included"],ans:"B"},
+    {q:"TCP connection teardown uses:",opts:["A 2-way handshake","A 3-way handshake","A 4-way handshake (FIN, ACK, FIN, ACK)","An RST packet only"],ans:"C"},
+    {q:"Which bit signals 'I want to close this connection' in TCP?",opts:["SYN bit = 1","ACK bit = 1","FIN bit = 1","RST bit = 1"],ans:"C"},
+    {q:"TCP flow control prevents:",opts:["Network congestion between routers","The sender from overflowing the receiver's buffer","Packet loss at intermediate nodes","IP header errors"],ans:"B"},
+    {q:"Flow control is a 'speed-matching service' because:",opts:["It matches sender's speed to network speed","It matches the sender's sending rate to the receiver application's reading rate","It matches TCP to UDP speed","It matches DNS resolution time"],ans:"B"},
+    {q:"The receiver in TCP flow control advertises its:",opts:["MSS","Sequence number","Receive window size (rwnd)","Congestion window"],ans:"C"},
+    {q:"A socket in TCP is described as:",opts:["A physical port on the router","The door between the application process and TCP connection","A type of IP address","A DHCP reservation"],ans:"B"},
+    {q:"In GBN (window N=4), if packet 2 is lost:",opts:["Only packet 2 is retransmitted","Packets 2, 3, 4, 5 are all retransmitted after timeout","The window closes completely","A NAK is sent immediately"],ans:"B"},
+    {q:"In Selective Repeat (window N=4), if packet 2 is lost:",opts:["Packets 2, 3, 4, 5 are all retransmitted","Only packet 2 is retransmitted; 3, 4, 5 are buffered","All packets retransmitted","Connection is reset"],ans:"B"},
+    {q:"Which scenario does rdt3.0 handle that rdt2.0 does not?",opts:["Bit errors","Bit errors AND packet loss","Reordering only","Network congestion"],ans:"B"},
+    {q:"Stop-and-wait (rdt3.0 without pipelining) has poor performance because:",opts:["It causes too many errors","Sender is idle most of the time waiting for one ACK","It uses too much memory","It doesn't support large packets"],ans:"B"},
+    {q:"In TCP, what is client_isn?",opts:["Client Internet Service Number","Client's initial sequence number for the TCP connection","Client's IP subnet number","Client's ISP number"],ans:"B"},
+    {q:"After TCP 3-way handshake completes, the connection state is:",opts:["SYN_SENT","ESTABLISHED","CLOSE_WAIT","TIME_WAIT"],ans:"B"},
+    {q:"Congestion control in TCP:",opts:["Prevents the receiver from being overwhelmed","Manages data transmission rate to prevent network congestion","Only applies to UDP","Is the same as flow control"],ans:"B"},
+    {q:"Pipelining increases performance by:",opts:["Decreasing throughput","Keeping the sender busy with multiple in-flight packets","Having no effect on throughput","Increasing latency"],ans:"B"},
+    {q:"Sequence numbers in GBN/SR are used to:",opts:["Identify which router sent the packet","Allow receiver to detect gaps and sender to track unACKed packets","Encrypt the payload","Compute the checksum"],ans:"B"},
+    {q:"Transport layer data units are called:",opts:["IP datagrams","Link-layer frames","Segments","Physical bits"],ans:"C"},
+    {q:"TCP 'in-order delivery' means:",opts:["Packets always arrive before the deadline","Data is delivered to the application in the same order it was sent","Packets are always fragmented in order","The sender sends packets alphabetically"],ans:"B"},
+    {q:"Which protocol does NOT use a handshake?",opts:["TCP","UDP","FTP (over TCP)","SMTP (over TCP)"],ans:"B"},
+    {q:"After full TCP connection establishment, the SYN bit in data segments is:",opts:["Always 1","0 (SYN only used during setup)","Alternating 0 and 1","Omitted entirely"],ans:"B"},
+    {q:"After TCP four-way termination, resources in both hosts are:",opts:["Allocated for the next connection","Deallocated","Kept in memory for 2 minutes","Transferred to the router"],ans:"B"},
+    {q:"TCP provides 'reliable, in-order byte stream' — 'byte stream' means:",opts:["Packets are sent as individual atoms","Data is treated as an unbroken stream of bytes (no boundaries between app writes)","Each byte has its own packet","Only 1 byte per segment"],ans:"B"},
+    {q:"rdt2.0 has a fatal flaw because:",opts:["It cannot handle packet loss","ACK/NAK packets themselves can be corrupted, breaking the protocol","It is too slow","It doesn't use sequence numbers"],ans:"B"},
+  ],
+  'l12-tf': [
+    {q:"UDP provides reliable, in-order delivery.",ans:false,exp:"UDP is unreliable and unordered; TCP provides reliability."},
+    {q:"TCP uses a three-way handshake to establish a connection.",ans:true,exp:"SYN → SYN-ACK → ACK is the three-way handshake."},
+    {q:"In rdt2.0, the sender retransmits if it receives a NAK from the receiver.",ans:true,exp:"NAK triggers retransmission in rdt2.0."},
+    {q:"In Go-Back-N, the receiver buffers out-of-order packets.",ans:false,exp:"GBN receivers DISCARD out-of-order packets."},
+    {q:"In Selective Repeat, when timeout occurs, only the specific lost packet is retransmitted.",ans:true,exp:"SR retransmits only the unACKed packet, not the entire window."},
+    {q:"TCP flow control prevents the sender from overwhelming the network.",ans:false,exp:"Flow control prevents overwhelming the RECEIVER's buffer; congestion control handles network overflow."},
+    {q:"The FIN bit in TCP is used to signal connection termination.",ans:true,exp:"FIN=1 signals that the sender wishes to close the connection."},
+    {q:"In the TCP three-way handshake, the server's response includes both SYN=1 and ACK=1.",ans:true,exp:"The SYN-ACK packet has both bits set."},
+    {q:"rdt3.0 handles both bit errors and packet loss.",ans:true,exp:"rdt3.0 adds a timer/timeout to handle loss in addition to rdt2.0's error handling."},
+    {q:"Pipelining allows only one packet to be in flight at a time.",ans:false,exp:"Pipelining allows MULTIPLE in-flight unACKed packets simultaneously."},
+  ],
+
+  'l13-mcq': [
+    {q:"HTTP stands for:",opts:["HyperText Transfer Protocol","Hyperlink Transfer Process","Host Transfer Protocol","HyperText Transmission Protocol"],ans:"A"},
+    {q:"HTTP is the web's:",opts:["Transport layer protocol","Application layer protocol","Network layer protocol","Link layer protocol"],ans:"B"},
+    {q:"HTTP uses which transport protocol?",opts:["UDP","IP","TCP","ICMP"],ans:"C"},
+    {q:"HTTP connects to the web server on port:",opts:["21","25","80","443"],ans:"C"},
+    {q:"HTTP is 'stateless' because:",opts:["It uses UDP","Server maintains no information about past client requests","It doesn't support persistent connections","Cookies track state at network level"],ans:"B"},
+    {q:"A web page is defined as:",opts:["A single HTML file","A collection of objects including a base HTML file and referenced objects","A URL only","An image file only"],ans:"B"},
+    {q:"In non-persistent HTTP, a new TCP connection is created:",opts:["Once per session","For each request/response pair","Only at start of session","Never — one connection is used for all"],ans:"B"},
+    {q:"Which HTTP connection type has reduced latency for multiple objects?",opts:["Non-persistent","Persistent","Both equal","HTTP/1.0"],ans:"B"},
+    {q:"Persistent HTTP keeps the TCP connection open:",opts:["For exactly 60 seconds","Until explicitly closed, allowing multiple requests/responses","For exactly one request","Until the client disconnects the Internet"],ans:"B"},
+    {q:"The main DISADVANTAGE of non-persistent HTTP is:",opts:["Too many cookies stored","Increased latency from repeated TCP setup overhead per object","Cannot use POST method","Cannot transfer images"],ans:"B"},
+    {q:"The HTTP request line contains:",opts:["Status code, version, phrase","Method, URL, version","Header name-value pairs only","Cookie information only"],ans:"B"},
+    {q:"In an HTTP GET request, the entity body is:",opts:["Filled with form data","Empty","Contains the response","Contains the URL"],ans:"B"},
+    {q:"The HTTP POST method:",opts:["Retrieves an object from the server","Sends data in the entity body to the server","Deletes an object on the server","Checks headers without retrieving the object"],ans:"B"},
+    {q:"HTTP status code '200 OK' means:",opts:["Request not found","Request succeeded; object is in the response body","Object moved permanently","Bad request"],ans:"B"},
+    {q:"HTTP status code '404' means:",opts:["OK — success","Bad Request","Not Found — requested object not on server","Moved Permanently"],ans:"C"},
+    {q:"HTTP status code '301' means:",opts:["Internal Server Error","Not Found","Moved Permanently to a new URL","OK — success"],ans:"C"},
+    {q:"HTTP status code '400' means:",opts:["Bad Request — server could not understand the request","Not Found","OK","Moved Permanently"],ans:"A"},
+    {q:"'Connection: close' header tells the server:",opts:["To use persistent connections","To close the TCP connection after sending the requested object","To reject the connection","To use HTTP/2.0"],ans:"B"},
+    {q:"'Accept-language: fr' header tells the server:",opts:["The browser accepts only French servers","The user prefers to receive the French version of the object","The connection should use French encoding","The request is from France"],ans:"B"},
+    {q:"Cookie technology consists of how many components?",opts:["2","3","4","5"],ans:"C"},
+    {q:"A cookie file is stored:",opts:["On the web server","In the DNS server","On the user's end system, managed by the browser","In the router's cache"],ans:"C"},
+    {q:"What does a web server send to create a cookie for a user?",opts:["A GET request","'Set-cookie: ID' header in the HTTP response","A POST request with the user's data","A DNS query response"],ans:"B"},
+    {q:"On subsequent HTTP requests after a cookie is set, the browser:",opts:["Never sends the cookie","Includes 'cookie: ID' in the HTTP request header","Sends a new DHCP request","Resets the connection"],ans:"B"},
+    {q:"Cookies can be used for:",opts:["Authorization, shopping carts, user sessions, recommendations","DNS resolution, IP assignment, routing","TCP connection management only","Packet fragmentation"],ans:"A"},
+    {q:"DNS stands for:",opts:["Domain Name System","Distributed Network Service","Domain Navigation Server","Dynamic Name Service"],ans:"A"},
+    {q:"The primary function of DNS is to:",opts:["Assign IP addresses to hosts (like DHCP)","Translate human-readable hostnames to IP addresses","Route packets between networks","Encrypt web traffic"],ans:"B"},
+    {q:"DNS is implemented as:",opts:["A single centralized server","A distributed database in a hierarchy of DNS servers","Part of the IP protocol","A transport-layer protocol"],ans:"B"},
+    {q:"How many root DNS servers exist?",opts:["5","10","13","26"],ans:"C"},
+    {q:"Root DNS servers are labeled:",opts:["1 through 13","A through M","01 through 13","Alpha through Sigma"],ans:"B"},
+    {q:"Root DNS servers primarily return:",opts:["The final IP address","The IP addresses of TLD servers for the queried top-level domain","The authoritative server's IP for the hostname","DNS error messages"],ans:"B"},
+    {q:"TLD servers handle which domains?",opts:["Only .com domains",".com, .org, .edu, .net, country codes (.uk, .fr, etc.)","Only country-code domains","All domains starting with a vowel"],ans:"B"},
+    {q:"Authoritative DNS servers:",opts:["Are only root servers","Provide authoritative hostname-to-IP mappings for specific organizations","Are always centralized","Only handle .com domains"],ans:"B"},
+    {q:"The local DNS server is also called:",opts:["Root server","TLD server","Default name server","Authoritative server"],ans:"C"},
+    {q:"When a host makes a DNS query, the first server contacted is:",opts:["A root server","The TLD server","The local DNS server","The authoritative server"],ans:"C"},
+    {q:"The local DNS server has a 'local cache' for:",opts:["Storing web pages","Recent name-to-address translation pairs (may be outdated)","Routing tables","Encryption keys"],ans:"B"},
+    {q:"Why is centralized DNS NOT used?",opts:["It would be too fast","Single point of failure, traffic volume, distant DB, maintenance issues","DNS is already centralized","DNS doesn't need servers"],ans:"B"},
+    {q:"When a DNS client queries www.amazon.com from scratch:",opts:["Goes directly to amazon.com's authoritative server","First contacts root → TLD .com server → amazon.com authoritative → gets IP","Sends query to all DNS servers simultaneously","Uses ARP to resolve the name"],ans:"B"},
+    {q:"The HTTP response begins with a:",opts:["Request line (method, URL, version)","Status line (version, status code, phrase)","Blank line","Entity body"],ans:"B"},
+    {q:"Content-Length in HTTP response header specifies:",opts:["Duration of TCP connection","Number of bytes in the entity body being sent","Number of cookies to set","Number of header fields"],ans:"B"},
+    {q:"Content-Type: text/html in HTTP response means:",opts:["Server is sending text commands","The entity body is an HTML document","Only French text is supported","The connection type is text-based"],ans:"B"},
+    {q:"A URL contains:",opts:["A type of IP address","A unique identifier for each object on the web (hostname + path)","A cookie identifier","A DNS server type"],ans:"B"},
+    {q:"DNS operates at which layer?",opts:["Physical layer","Network layer","Transport layer","Application layer"],ans:"D"},
+    {q:"HTTP operates at which layer?",opts:["Physical layer","Network layer","Transport layer","Application layer"],ans:"D"},
+    {q:"The base HTML file in a web page:",opts:["Contains all the objects directly","References multiple other objects (images, scripts, etc.)","Is identical to the full web page","Is only used for DNS"],ans:"B"},
+    {q:"HTTP PUT method is used for:",opts:["Uploading a file/object to a specified path on the server","Deleting an object from the server","Retrieving an object from the server","Posting form data"],ans:"A"},
+    {q:"The 'Host' header in an HTTP request specifies:",opts:["The client's IP address","The server to which the request is sent (virtual hosting)","The file format requested","The connection timeout"],ans:"B"},
+    {q:"DNS resolution allows a browser to:",opts:["Encrypt the web page","Obtain the IP address of the server before initiating a TCP connection","Store cookies","Compress the web page"],ans:"B"},
+    {q:"HTTP's stateless nature means:",opts:["Servers forget past interactions — each request processed independently","Servers remember all past user interactions","TCP must be re-established for each character","HTTP uses UDP"],ans:"A"},
+    {q:"After the root server responds to a query for www.amazon.com:",opts:["The answer (IP) is returned directly","The TLD server for .com is contacted next","Local server caches the root response and retries","A second root server is contacted"],ans:"B"},
+    {q:"The 'Date' header in an HTTP response gives:",opts:["When the object was last modified","The date and time the response message was created by the server","Expiration date of the cookie","Date the connection was established"],ans:"B"},
+  ],
+  'l13-tf': [
+    {q:"HTTP is stateless — the server maintains no information about past client requests.",ans:true,exp:"HTTP's statelessness is a fundamental design choice."},
+    {q:"HTTP uses UDP as its underlying transport protocol.",ans:false,exp:"HTTP uses TCP (port 80)."},
+    {q:"In persistent HTTP, a new TCP connection is created for each object requested.",ans:false,exp:"Persistent HTTP reuses one connection for multiple objects."},
+    {q:"The HTTP GET method includes data in the entity body.",ans:false,exp:"GET has an empty entity body; POST includes data in the body."},
+    {q:"HTTP status code 404 means 'Not Found'.",ans:true,exp:"404 Not Found is one of the most common HTTP error codes."},
+    {q:"Cookie technology consists of exactly four components.",ans:true,exp:"The four components are: response header, request header, cookie file on client, back-end database."},
+    {q:"DNS is a centralized system with one global DNS server.",ans:false,exp:"DNS is a distributed hierarchical system with root, TLD, and authoritative servers."},
+    {q:"There are 13 root DNS servers labeled A through M.",ans:true,exp:"The Internet has 13 root DNS servers."},
+    {q:"Local DNS servers are strictly part of the DNS hierarchy.",ans:false,exp:"Local DNS servers do NOT strictly belong to the hierarchy; they act as proxies."},
+    {q:"A web page is defined as a single HTML file only.",ans:false,exp:"A web page consists of a base HTML file plus multiple referenced objects."},
+    {q:"The HTTP status code '200 OK' indicates a successful request.",ans:true,exp:"200 OK is the standard success response."},
+    {q:"TLD DNS servers handle domains like .com, .org, .edu, and country codes.",ans:true,exp:"TLD servers are responsible for these top-level domain namespaces."},
+  ],
+};
+
+// ══════════════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════════════
+const LETTERS = ['A','B','C','D'];
+
+function buildMCQ(containerId, questions) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  questions.forEach((item, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.dataset.correct = item.ans;
+    card.dataset.qi = qi;
+    card.dataset.container = containerId;
+
+    let optsHTML = '';
+    item.opts.forEach((opt, i) => {
+      optsHTML += `<div class="opt" data-letter="${LETTERS[i]}" onclick="selectOpt(this, '${LETTERS[i]}', '${item.ans}', '${containerId}', ${qi})">
+        <div class="opt-letter">${LETTERS[i]}</div>
+        <div class="opt-text">${opt}</div>
+      </div>`;
+    });
+
+    card.innerHTML = `
+      <div class="q-top">
+        <div class="q-num-badge">Q${qi+1}</div>
+        <div class="q-text">${item.q}</div>
+      </div>
+      <div class="q-options">${optsHTML}</div>
+      <div class="q-answer" id="${containerId}-ans-${qi}">✓ Correct Answer: <strong>${item.ans}</strong> — ${item.opts[LETTERS.indexOf(item.ans)]}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function buildTF(containerId, questions) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  questions.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'tf-card';
+    const badgeClass = 'hidden-badge';
+    const isTrue = item.ans;
+    card.innerHTML = `
+      <div class="tf-badge ${badgeClass}" id="${containerId}-badge-${i}" onclick="toggleTF(this, ${isTrue}, '${containerId}', ${i})">?</div>
+      <div class="tf-content">
+        <div class="tf-question">TF${i+1}: ${item.q}</div>
+        <div class="tf-explanation" id="${containerId}-exp-${i}">→ ${item.exp}</div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function selectOpt(el, letter, correct, containerId, qi) {
+  const card = el.closest('.q-card');
+  const opts = card.querySelectorAll('.opt');
+  opts.forEach(o => o.classList.remove('correct'));
+  const ansEl = document.getElementById(`${containerId}-ans-${qi}`);
+  if (letter === correct) {
+    el.classList.add('correct');
+  } else {
+    const correctOpt = card.querySelector(`[data-letter="${correct}"]`);
+    if (correctOpt) correctOpt.classList.add('correct');
+  }
+  ansEl.classList.add('revealed');
+}
+
+function revealAll(containerId) {
+  document.querySelectorAll(`#${containerId} .q-answer`).forEach(el => el.classList.add('revealed'));
+  const questions = DATA[containerId];
+  if (questions) {
+    questions.forEach((item, qi) => {
+      const card = document.querySelector(`#${containerId} .q-card:nth-child(${qi+1})`);
+      if (card) {
+        const correctOpt = card.querySelector(`[data-letter="${item.ans}"]`);
+        if (correctOpt) correctOpt.classList.add('correct');
+      }
+    });
+  }
+}
+
+function hideAll(containerId) {
+  document.querySelectorAll(`#${containerId} .q-answer`).forEach(el => el.classList.remove('revealed'));
+  document.querySelectorAll(`#${containerId} .opt`).forEach(el => el.classList.remove('correct'));
+}
+
+function toggleTF(badgeEl, isTrue, containerId, i) {
+  const expEl = document.getElementById(`${containerId}-exp-${i}`);
+  if (badgeEl.classList.contains('hidden-badge')) {
+    badgeEl.classList.remove('hidden-badge');
+    if (isTrue) {
+      badgeEl.classList.add('true-badge');
+      badgeEl.textContent = 'TRUE';
+    } else {
+      badgeEl.classList.add('false-badge');
+      badgeEl.textContent = 'FALSE';
+    }
+    expEl.classList.add('revealed');
+  } else {
+    badgeEl.classList.remove('true-badge', 'false-badge');
+    badgeEl.classList.add('hidden-badge');
+    badgeEl.textContent = '?';
+    expEl.classList.remove('revealed');
+  }
+}
+
+function revealAllTF(containerId) {
+  const questions = DATA[containerId];
+  if (!questions) return;
+  questions.forEach((item, i) => {
+    const badgeEl = document.getElementById(`${containerId}-badge-${i}`);
+    const expEl = document.getElementById(`${containerId}-exp-${i}`);
+    if (badgeEl && badgeEl.classList.contains('hidden-badge')) {
+      badgeEl.classList.remove('hidden-badge');
+      if (item.ans) { badgeEl.classList.add('true-badge'); badgeEl.textContent = 'TRUE'; }
+      else { badgeEl.classList.add('false-badge'); badgeEl.textContent = 'FALSE'; }
+      if (expEl) expEl.classList.add('revealed');
+    }
+  });
+}
+
+function hideAllTF(containerId) {
+  const questions = DATA[containerId];
+  if (!questions) return;
+  questions.forEach((_, i) => {
+    const badgeEl = document.getElementById(`${containerId}-badge-${i}`);
+    const expEl = document.getElementById(`${containerId}-exp-${i}`);
+    if (badgeEl) {
+      badgeEl.classList.remove('true-badge', 'false-badge');
+      badgeEl.classList.add('hidden-badge');
+      badgeEl.textContent = '?';
+    }
+    if (expEl) expEl.classList.remove('revealed');
+  });
+}
+
+function showPanel(id) {
+  document.querySelectorAll('.lecture-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Init all
+window.addEventListener('DOMContentLoaded', () => {
+  buildMCQ('l9-mcq', DATA['l9-mcq']);
+  buildTF('l9-tf', DATA['l9-tf']);
+  buildMCQ('l10-mcq', DATA['l10-mcq']);
+  buildTF('l10-tf', DATA['l10-tf']);
+  buildMCQ('l11-mcq', DATA['l11-mcq']);
+  buildTF('l11-tf', DATA['l11-tf']);
+  buildMCQ('l12-mcq', DATA['l12-mcq']);
+  buildTF('l12-tf', DATA['l12-tf']);
+  buildMCQ('l13-mcq', DATA['l13-mcq']);
+  buildTF('l13-tf', DATA['l13-tf']);
+});
+</script>
+</body>
+</html>
